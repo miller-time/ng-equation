@@ -1,0 +1,21 @@
+{
+  "name": "ng-equation",
+  "version": "1.0.0",
+  "description": "Boolean Equation Builder for complex data",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.1",
+    "grunt-html2js": "^0.3.6",
+    "grunt-ng-annotate": "^2.0.2",
+    "load-grunt-tasks": "^3.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miller-time/ng-equation.git"
+  },
+  "author": "Russell Cousineau <russell.miller@rentrakmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/miller-time/ng-equation"
+}
