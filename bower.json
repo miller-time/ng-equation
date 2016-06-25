@@ -10,5 +10,8 @@
   "ignore": [
     "node_modules",
     "bower_components"
-  ]
+  ],
+  "dependencies": {
+    "angular": ">=1.2"
+  }
 }
