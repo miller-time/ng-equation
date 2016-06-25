@@ -1,8 +1,7 @@
-<span class="expression-group"
-    ng-class="group.containerClass">
+<span class="eq-group">
 
     <span ng-repeat="operand in group.operands">
-        <span ng-if="$first && group.operator === 'AND NOT'" class="operator">
+        <span ng-if="$first && group.operator === 'AND NOT'" class="eq-operator">
             NOT
         </span>
 
@@ -17,12 +16,12 @@
         <!-- not subgroup -->
         <span ng-if="!operand.operands">
             <expression-operand
-                container-class="{{operand.containerClass}}"
+                operand-class="{{operand.operandClass}}"
                 label="{{operand.label}}">
             </expression-operand>
         </span>
 
-        <span ng-if="!$last" class="operator">
+        <span ng-if="!$last" class="eq-operator">
             {{group.operator}}
         </span>
     </span>

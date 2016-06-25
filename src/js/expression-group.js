@@ -11,7 +11,6 @@ angular.module('ngEquation')
             restrict: 'EA',
             scope: {},
             bindToController: {
-                containerClass: '@',
                 operator: '@',
                 operands: '='
             },
