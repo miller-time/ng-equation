@@ -1,0 +1,18 @@
+<span class="expression-group"
+    ng-class="group.containerClass">
+
+    <span ng-repeat="operand in group.operands">
+        <span ng-if="$first && group.operator === 'AND NOT'" class="operator">
+            NOT
+        </span>
+
+        <expression-operand
+            container-class="{{operand.containerClass}}"
+            label="{{operand.label}}">
+        </expression-operand>
+
+        <span ng-if="!$last" class="operator">
+            {{group.operator}}
+        </span>
+    </span>
+</span>
