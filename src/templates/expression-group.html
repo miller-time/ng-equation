@@ -6,10 +6,21 @@
             NOT
         </span>
 
-        <expression-operand
-            container-class="{{operand.containerClass}}"
-            label="{{operand.label}}">
-        </expression-operand>
+        <!-- subgroup -->
+        <span ng-if="operand.operands">
+            <expression-group
+                operator="{{operand.operator}}"
+                operands="operand.operands">
+            </expression-group>
+        </span>
+
+        <!-- not subgroup -->
+        <span ng-if="!operand.operands">
+            <expression-operand
+                container-class="{{operand.containerClass}}"
+                label="{{operand.label}}">
+            </expression-operand>
+        </span>
 
         <span ng-if="!$last" class="operator">
             {{group.operator}}
