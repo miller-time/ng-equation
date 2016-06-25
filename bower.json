@@ -1,0 +1,14 @@
+{
+  "name": "ng-equation",
+  "authors": [
+    "Russell Cousineau <russell.miller@rentrakmail.com>"
+  ],
+  "description": "Boolean Equation Builder for complex data",
+  "main": "",
+  "license": "MIT",
+  "homepage": "http://github.com/miller-time/ng-equation",
+  "ignore": [
+    "node_modules",
+    "bower_components"
+  ]
+}
