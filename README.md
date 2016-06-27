@@ -12,9 +12,11 @@ Install via bower or download source from this repo
 bower install ng-equation
 ```
 
-Add the following to your html
+Add the following to your html (angular and interact are required dependencies)
 
 ```html
+<script src="angular/angular.min.js"></script>
+<script src="interact/interact.js"></script>
 <script src="ng-equation/dist/ng-equation-template.js"></script>
 <script src="ng-equation/dist/ng-equation.min.js"></script>
 ```
