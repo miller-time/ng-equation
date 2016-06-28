@@ -17,14 +17,42 @@ angular.module('ngEquation')
             controller: 'ExpressionOperandCtrl',
             controllerAs: 'operand',
             link: function(scope, element) {
-                interact(element.find('span').eq(0).find('span')[0])
+
+                var operandElement = element.find('span').eq(0).find('span')[0];
+
+                interact(operandElement)
                     .draggable({
-                        restrict: {
-                            restriction: 'parent',
-                            endOnly: true,
-                            elementRect: {left: 0, right: 1, top: 0, bottom: 1}
-                        },
                         autoScroll: true,
+                        snap: {
+                            range: Infinity,
+                            relativePoints: [{x: 0.5, y: 0.5}],
+                            endOnly: true
+                        },
+                        onstart: function(event) {
+
+                            // record the original position of operand at beginning of first drag
+
+                            var startX = parseFloat(event.target.getAttribute('data-start-x')),
+                                startY = parseFloat(event.target.getAttribute('data-start-y'));
+
+                            if (isNaN(startX) || isNaN(startY)) {
+                                var rect = interact.getElementRect(event.target);
+
+                                startX = rect.left + rect.width / 2;
+                                startY = rect.top + rect.height / 2;
+
+                                event.target.setAttribute('data-start-x', startX);
+                                event.target.setAttribute('data-start-y', startY);
+
+                                // snap operand to its original position
+
+                                event.interactable.draggable({
+                                    snap: {
+                                        targets: [{x: startX, y: startY}]
+                                    }
+                                });
+                            }
+                        },
                         onmove: function(event) {
                             var target = event.target,
                                 x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
