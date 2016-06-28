@@ -4,15 +4,14 @@ angular.module('ngEquation')
     .controller('ExpressionOperandCtrl', function() {
         var ctrl = this;
 
-        console.log(ctrl.label);
+        console.log(ctrl.options.label);
     })
     .directive('expressionOperand', function($templateCache) {
         return {
             restrict: 'EA',
             scope: {},
             bindToController: {
-                operandClass: '@',
-                label: '@'
+                options: '=operandOptions'
             },
             controller: 'ExpressionOperandCtrl',
             controllerAs: 'operand',

@@ -63,11 +63,8 @@ angular.module('ngEquation')
                         ondrop: function(event) {
                             event.relatedTarget.classList.remove('can-drop');
 
-                            var operand = {};
                             var operandCtrl = angular.element(event.relatedTarget).scope().operand;
-                            operand.operandClass = operandCtrl.operandClass;
-                            operand.label = operandCtrl.label;
-                            console.log('dropped', operand);
+                            console.log('dropped', operandCtrl.options);
 
                             var group = {};
                             console.log('target', event.target);
