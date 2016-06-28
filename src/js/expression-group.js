@@ -1,10 +1,41 @@
 'use strict';
 
 angular.module('ngEquation')
-    .controller('ExpressionGroupCtrl', function() {
+    .controller('ExpressionGroupCtrl', function($filter) {
         var ctrl = this;
 
-        console.log(ctrl.operator, ctrl.operands);
+        // extend this group's operands by supplying them with a method
+        // that removes them from the group when called
+
+        function OperandOptions(config) {
+            this.class = config.class;
+            this.label = config.label;
+            if (angular.isDefined(config.operator)) {
+                this.operator = config.operator;
+            }
+            if (angular.isDefined(config.operands)) {
+                this.operands = config.operands;
+            }
+        }
+
+        OperandOptions.prototype.removeOperand = function() {
+            var operand = this,
+                operandIndex = -1;
+
+            for (var i = 0; i < ctrl.operands.length; ++i) {
+                if (ctrl.operands[i].class === this.class &&
+                    ctrl.operands[i].label === this.label) {
+                    operandIndex = i;
+                }
+            }
+            if (operandIndex !== -1) {
+                ctrl.operands.splice(operandIndex, 1);
+            }
+        };
+
+        ctrl.operands = ctrl.operands.map(function(operand) {
+            return new OperandOptions(operand);
+        });
     })
     .directive('expressionGroup', function($templateCache) {
         return {
@@ -72,6 +103,11 @@ angular.module('ngEquation')
                             group.operator = groupCtrl.operator;
                             group.operands = groupCtrl.operands;
                             console.log('onto', group);
+
+                            console.log('removing operand from old group...');
+                            scope.$apply(function() {
+                                operandCtrl.options.removeOperand(operandCtrl.options);
+                            });
                         },
                         ondropdeactivate: function(event) {
                             event.target.classList.remove('drop-active');
