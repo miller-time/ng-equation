@@ -57,6 +57,12 @@ angular.module('ngEquation')
                 interact(element.find('span')[0])
                     .dropzone({
                         accept: '.eq-operand',
+                        checker: function(dragEvent, event, dropped, dropZone, dropElement, draggable, draggableElement) {
+                            var operandCtrl = angular.element(draggableElement).scope().operand,
+                                groupCtrl = angular.element(dropElement).scope().group;
+
+                            return dropped && (groupCtrl.getIndexOfOperand(operandCtrl.options) === -1);
+                        },
                         ondropactivate: function(event) {
                             event.target.classList.add('drop-active');
                         },
