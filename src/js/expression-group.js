@@ -19,15 +19,7 @@ angular.module('ngEquation')
         }
 
         OperandOptions.prototype.removeOperand = function() {
-            var operand = this,
-                operandIndex = -1;
-
-            for (var i = 0; i < ctrl.operands.length; ++i) {
-                if (ctrl.operands[i].class === this.class &&
-                    ctrl.operands[i].label === this.label) {
-                    operandIndex = i;
-                }
-            }
+            var operandIndex = ctrl.getIndexOfOperand(this);
             if (operandIndex !== -1) {
                 ctrl.operands.splice(operandIndex, 1);
             }
@@ -36,6 +28,20 @@ angular.module('ngEquation')
         ctrl.operands = ctrl.operands.map(function(operand) {
             return new OperandOptions(operand);
         });
+
+        ctrl.addOperand = function(operand) {
+            ctrl.operands.push(new OperandOptions(operand));
+        };
+
+        ctrl.getIndexOfOperand = function(operand) {
+            for (var i = 0; i < ctrl.operands.length; ++i) {
+                if (ctrl.operands[i].class === operand.class &&
+                    ctrl.operands[i].label === operand.label) {
+                    return i;
+                }
+            }
+            return -1;
+        };
     })
     .directive('expressionGroup', function($templateCache) {
         return {
@@ -94,17 +100,13 @@ angular.module('ngEquation')
                         ondrop: function(event) {
                             event.relatedTarget.classList.remove('can-drop');
 
-                            var operandCtrl = angular.element(event.relatedTarget).scope().operand;
-                            console.log('dropped', operandCtrl.options);
+                            var operandCtrl = angular.element(event.relatedTarget).scope().operand,
+                                groupCtrl = angular.element(event.target).scope().group;
 
-                            var group = {};
-                            console.log('target', event.target);
-                            var groupCtrl = angular.element(event.target).scope().group;
-                            group.operator = groupCtrl.operator;
-                            group.operands = groupCtrl.operands;
-                            console.log('onto', group);
+                            scope.$apply(function() {
+                                groupCtrl.addOperand(operandCtrl.options);
+                            });
 
-                            console.log('removing operand from old group...');
                             scope.$apply(function() {
                                 operandCtrl.options.removeOperand(operandCtrl.options);
                             });
