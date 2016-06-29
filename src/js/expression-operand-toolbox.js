@@ -13,11 +13,7 @@ angular.module('ngEquation')
         }
 
         OperandOptions.prototype.removeOperand = function() {
-            var operandIndex = ctrl.getIndexOfOperand(this);
-            if (operandIndex !== -1) {
-                ctrl.operands.splice(operandIndex, 1);
-            }
-            ctrl.refresh();
+            ctrl.refresh(ctrl.getIndexOfOperand(this));
         };
 
         ctrl.getIndexOfOperand = function(operand) {
@@ -32,13 +28,18 @@ angular.module('ngEquation')
 
         var originalOperandsList = angular.copy(ctrl.operands);
 
-        ctrl.refresh = function() {
-            ctrl.operands = [];
-            $timeout(function() {
-                ctrl.operands = originalOperandsList.map(function(operand) {
-                    return new OperandOptions(operand);
+        ctrl.refresh = function(operandIndex) {
+            if (angular.isDefined(operandIndex) && operandIndex !== -1) {
+                var freshOperand = new OperandOptions(originalOperandsList[operandIndex]);
+                ctrl.operands.splice(operandIndex, 1, freshOperand);
+            } else {
+                ctrl.operands = [];
+                $timeout(function() {
+                    ctrl.operands = originalOperandsList.map(function(operand) {
+                        return new OperandOptions(operand);
+                    });
                 });
-            });
+            }
         };
 
         ctrl.refresh();
