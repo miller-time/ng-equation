@@ -65,6 +65,22 @@ angular.module('ngEquation')
                             target.setAttribute('data-x', x);
                             target.setAttribute('data-y', y);
                         }
+                    })
+                    .dropzone({
+                        accept: '.eq-operand',
+                        ondropactivate: function(event) {
+                            event.target.classList.add('drop-active');
+                        },
+                        ondragenter: function(event) {
+                            event.target.classList.add('drop-target');
+                        },
+                        ondragleave: function(event) {
+                            event.target.classList.remove('drop-target');
+                        },
+                        ondropdeactivate: function(event) {
+                            event.target.classList.remove('drop-active');
+                            event.target.classList.remove('drop-target');
+                        }
                     });
             },
             template: $templateCache.get('expression-operand.html')
