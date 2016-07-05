@@ -54,7 +54,7 @@ angular.module('ngEquation')
             controller: 'ExpressionGroupCtrl',
             controllerAs: 'group',
             link: function(scope, element, attrs, controller) {
-                interact(element.find('span')[0])
+                interact(element.find('.eq-group')[0])
                     .dropzone({
                         accept: '.eq-operand',
                         checker: function(dragEvent, event, dropped, dropZone, dropElement, draggable, draggableElement) {

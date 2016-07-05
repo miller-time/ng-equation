@@ -17,7 +17,7 @@ angular.module('ngEquation')
             controllerAs: 'operand',
             link: function(scope, element) {
 
-                var operandElement = element.find('span').eq(0).find('span')[0];
+                var operandElement = element.find('.eq-operand')[0];
 
                 interact(operandElement)
                     .draggable({
