@@ -34,6 +34,13 @@ angular.module('ngEquation')
             ctrl.operands.push(new OperandOptions(operand));
         };
 
+        ctrl.addSubgroup = function() {
+            ctrl.addOperand({
+                operator: 'AND',
+                operands: []
+            });
+        };
+
         ctrl.getIndexOfOperand = function(operand) {
             for (var i = 0; i < ctrl.operands.length; ++i) {
                 if (ctrl.operands[i].class === operand.class &&
@@ -50,7 +57,8 @@ angular.module('ngEquation')
             scope: {},
             bindToController: {
                 operator: '@',
-                operands: '='
+                operands: '=',
+                availableOperands: '='
             },
             controller: 'ExpressionGroupCtrl',
             controllerAs: 'group',
