@@ -56,6 +56,7 @@ angular.module('ngEquation')
             restrict: 'EA',
             scope: {},
             bindToController: {
+                parent: '=?',
                 operator: '@',
                 operands: '=',
                 availableOperands: '='

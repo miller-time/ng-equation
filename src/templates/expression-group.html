@@ -8,6 +8,7 @@
         <!-- subgroup -->
         <span ng-if="operand.operands">
             <expression-group
+                parent="group"
                 operator="{{operand.operator}}"
                 operands="operand.operands"
                 available-operands="group.availableOperands">
@@ -64,4 +65,9 @@
             </li>
         </ul>
     </div>
+
+    <button class="eq-remove-group"
+        ng-if="group.parent">
+        Remove Group
+    </button>
 </span>
