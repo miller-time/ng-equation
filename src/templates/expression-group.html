@@ -20,9 +20,16 @@
             </expression-operand>
         </span>
 
-        <span ng-if="!$last" class="eq-operator">
-            {{group.operator}}
-        </span>
+        <div class="btn-group" uib-dropdown ng-if="!$last">
+            <button class="eq-operator btn" uib-dropdown-toggle>
+                {{group.operator}} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" uib-dropdown-menu>
+                <li><a href>AND</a></li>
+                <li><a href>OR</a></li>
+                <li><a href>AND NOT</a></li>
+            </ul>
+        </div>
     </span>
 
     <button class="eq-new-operand">
