@@ -50,7 +50,8 @@ angular.module('ngEquation')
             scope: {},
             bindToController: {
                 operator: '@',
-                operands: '='
+                operands: '=',
+                availableOperands: '='
             },
             controller: 'ExpressionGroupCtrl',
             controllerAs: 'group',

@@ -9,7 +9,8 @@
         <span ng-if="operand.operands">
             <expression-group
                 operator="{{operand.operator}}"
-                operands="operand.operands">
+                operands="operand.operands"
+                available-operands="group.availableOperands">
             </expression-group>
         </span>
 
@@ -44,7 +45,18 @@
         </div>
     </span>
 
-    <button class="eq-new-operand">
-        &#10133;
-    </button>
+    <div class="btn-group" uib-dropdown>
+        <button class="eq-new-operand btn" uib-dropdown-toggle>
+            &#10133; <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu>
+            <li ng-repeat="availableOperand in group.availableOperands"
+                ng-class="availableOperand.class"
+                class="eq-operand-menu-item">
+                <a href>
+                    {{availableOperand.label}}
+                </a>
+            </li>
+        </ul>
+    </div>
 </span>
