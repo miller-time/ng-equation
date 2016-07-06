@@ -87,12 +87,55 @@ angular.module('ngEquation')
 
                             // existing operand
                             event.relatedTarget.classList.add('can-drop');
+
+                            // change new operand's snap target to be the existing operand
+
+                            var dropRect = interact.getElementRect(event.target),
+                                dropCenter = {
+                                    x: dropRect.left + dropRect.width / 2,
+                                    y: dropRect.top + dropRect.height / 2
+                                };
+
+                            event.draggable.draggable({
+                                snap: {
+                                    targets: [dropCenter]
+                                }
+                            });
                         },
                         ondragleave: function(event) {
                             event.target.classList.remove('drop-target');
 
                             // existing operand
                             event.relatedTarget.classList.remove('can-drop');
+
+                            // restore new operand's snap target to its original position
+
+                            event.draggable.draggable({
+                                snap: {
+                                    targets: [{
+                                        x: parseFloat(event.relatedTarget.getAttribute('data-start-x')),
+                                        y: parseFloat(event.relatedTarget.getAttribute('data-start-y'))
+                                    }]
+                                }
+                            });
+                        },
+                        ondrop: function(event) {
+                            event.relatedTarget.classList.remove('can-drop');
+
+                            var newOperandCtrl = angular.element(event.relatedTarget).scope().operand,
+                                existingOperandCtrl = angular.element(event.target).scope().operand;
+
+                            scope.$apply(function() {
+                                existingOperandCtrl.options.group.addOperand({
+                                    operator: 'AND',
+                                    operands: [existingOperandCtrl.options, newOperandCtrl.options]
+                                });
+                            });
+
+                            scope.$apply(function() {
+                                newOperandCtrl.options.removeOperand(newOperandCtrl.options);
+                                existingOperandCtrl.options.removeOperand(existingOperandCtrl.options);
+                            });
                         },
                         ondropdeactivate: function(event) {
                             event.target.classList.remove('drop-active');
