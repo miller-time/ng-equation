@@ -2,5 +2,11 @@
     <span class="eq-operand" style="display: inline-block"
         ng-class="operand.options.class">
         {{operand.options.label}}
+
+        <button class="eq-remove-operand"
+            ng-if="operand.options.group"
+            ng-click="operand.options.removeOperand(operand.options)">
+            &times;
+        </button>
     </span>
 </span>
