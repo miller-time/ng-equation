@@ -50,6 +50,10 @@ angular.module('ngEquation')
             }
             return -1;
         };
+
+        ctrl.removeSubgroup = function(subgroupId) {
+            this.operands.splice(subgroupId, 1);
+        };
     })
     .directive('expressionGroup', function($templateCache) {
         return {
@@ -57,6 +61,7 @@ angular.module('ngEquation')
             scope: {},
             bindToController: {
                 parent: '=?',
+                subgroupId: '@',
                 operator: '@',
                 operands: '=',
                 availableOperands: '='
