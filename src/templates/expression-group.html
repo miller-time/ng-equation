@@ -8,6 +8,8 @@
         <!-- subgroup -->
         <span ng-if="operand.operands">
             <expression-group
+                parent="group"
+                subgroup-id="{{$index}}"
                 operator="{{operand.operator}}"
                 operands="operand.operands"
                 available-operands="group.availableOperands">
@@ -64,4 +66,10 @@
             </li>
         </ul>
     </div>
+
+    <button class="eq-remove-group"
+        ng-if="group.parent"
+        ng-click="group.parent.removeSubgroup(group.subgroupId)">
+        Remove Group
+    </button>
 </span>
