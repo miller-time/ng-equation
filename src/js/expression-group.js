@@ -8,6 +8,7 @@ angular.module('ngEquation')
         // that removes them from the group when called
 
         function OperandOptions(config) {
+            this.group = ctrl;
             this.class = config.class;
             this.label = config.label;
             if (angular.isDefined(config.operator)) {

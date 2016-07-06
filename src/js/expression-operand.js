@@ -68,14 +68,31 @@ angular.module('ngEquation')
                     })
                     .dropzone({
                         accept: '.eq-operand',
+                        checker: function(dragEvent, event, dropped, dropZone, dropElement, draggable, draggableElement) {
+                            var existingOperandScope = angular.element(dropElement).scope();
+                            if (existingOperandScope) {
+                                var existingOperandCtrl = existingOperandScope.operand;
+                                if (dropped && existingOperandCtrl.options.group) {
+                                    var newOperandCtrl = angular.element(draggableElement).scope().operand;
+
+                                    return dropped && (existingOperandCtrl.options.group.getIndexOfOperand(newOperandCtrl.options) === -1);
+                                }
+                            }
+                        },
                         ondropactivate: function(event) {
                             event.target.classList.add('drop-active');
                         },
                         ondragenter: function(event) {
                             event.target.classList.add('drop-target');
+
+                            // existing operand
+                            event.relatedTarget.classList.add('can-drop');
                         },
                         ondragleave: function(event) {
                             event.target.classList.remove('drop-target');
+
+                            // existing operand
+                            event.relatedTarget.classList.remove('can-drop');
                         },
                         ondropdeactivate: function(event) {
                             event.target.classList.remove('drop-active');
