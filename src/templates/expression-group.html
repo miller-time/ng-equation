@@ -53,8 +53,13 @@
             <li ng-repeat="availableOperand in group.availableOperands"
                 ng-class="availableOperand.class"
                 class="eq-operand-menu-item">
-                <a href>
-                    {{availableOperand.label}}
+                <a href ng-click="group.addOperand(availableOperand)">
+                    {{availableOperand.label || 'Add Subgroup'}}
+                </a>
+            </li>
+            <li>
+                <a href ng-click="group.addSubgroup()">
+                    Add Subgroup
                 </a>
             </li>
         </ul>
