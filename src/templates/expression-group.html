@@ -25,9 +25,21 @@
                 {{group.operator}} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" uib-dropdown-menu>
-                <li><a href>AND</a></li>
-                <li><a href>OR</a></li>
-                <li><a href>AND NOT</a></li>
+                <li ng-class="{'active': group.operator === 'AND'}">
+                    <a href ng-click="group.operator = 'AND'">
+                        AND
+                    </a>
+                </li>
+                <li ng-class="{'active': group.operator === 'OR'}">
+                    <a href ng-click="group.operator = 'OR'">
+                        OR
+                    </a>
+                </li>
+                <li ng-class="{'active': group.operator === 'AND NOT'}">
+                    <a href ng-click="group.operator = 'AND NOT'">
+                        AND NOT
+                    </a>
+                </li>
             </ul>
         </div>
     </span>
