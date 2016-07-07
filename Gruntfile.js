@@ -87,6 +87,14 @@ module.exports = function(grunt) {
             target: [
                 'src/**/*.js'
             ]
+        },
+
+        // Test settings
+        karma: {
+            continuous: {
+                configFile: 'karma.conf.js',
+                singleRun: true
+            }
         }
 
     });
