@@ -106,6 +106,11 @@ module.exports = function(grunt) {
         'clean'
     ]);
 
+    grunt.registerTask('test', [
+        'karma:continuous',
+        'eslint'
+    ]);
+
     grunt.registerTask('default', [
         'build'
     ]);
