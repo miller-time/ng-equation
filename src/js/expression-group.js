@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('ngEquation')
-    .controller('ExpressionGroupCtrl', function($filter) {
+    .controller('ExpressionGroupCtrl', function() {
         var ctrl = this;
 
         // extend this group's operands by supplying them with a method
@@ -68,7 +68,7 @@ angular.module('ngEquation')
             },
             controller: 'ExpressionGroupCtrl',
             controllerAs: 'group',
-            link: function(scope, element, attrs, controller) {
+            link: function(scope, element) {
                 interact(element.find('.eq-new-operand')[0])
                     .dropzone({
                         accept: '.eq-operand',
@@ -81,6 +81,7 @@ angular.module('ngEquation')
 
                                 return dropped && (groupCtrl.getIndexOfOperand(operandCtrl.options) === -1);
                             }
+                            return false;
                         },
                         ondropactivate: function(event) {
                             event.target.classList.add('drop-active');

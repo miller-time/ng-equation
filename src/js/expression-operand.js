@@ -4,6 +4,7 @@ angular.module('ngEquation')
     .controller('ExpressionOperandCtrl', function() {
         var ctrl = this;
 
+        // eslint-disable-next-line no-console
         console.log(ctrl.options.label);
     })
     .directive('expressionOperand', function($templateCache) {
@@ -16,7 +17,6 @@ angular.module('ngEquation')
             controller: 'ExpressionOperandCtrl',
             controllerAs: 'operand',
             link: function(scope, element) {
-
                 var operandElement = element.find('.eq-operand')[0];
 
                 interact(operandElement)
@@ -28,7 +28,6 @@ angular.module('ngEquation')
                             endOnly: true
                         },
                         onstart: function(event) {
-
                             // record the original position of operand at beginning of first drag
 
                             var startX = parseFloat(event.target.getAttribute('data-start-x')),
@@ -78,6 +77,7 @@ angular.module('ngEquation')
                                     return dropped && (existingOperandCtrl.options.group.getIndexOfOperand(newOperandCtrl.options) === -1);
                                 }
                             }
+                            return false;
                         },
                         ondropactivate: function(event) {
                             event.target.classList.add('drop-active');
