@@ -81,6 +81,12 @@ module.exports = function(grunt) {
                     }
                 ]
             }
+        },
+
+        eslint: {
+            target: [
+                'src/**/*.js'
+            ]
         }
 
     });

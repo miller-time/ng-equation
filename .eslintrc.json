@@ -1,0 +1,22 @@
+{
+  "extends": "airbnb-base/legacy",
+  "parserOptions": {
+    "ecmaVersion": 5,
+    "sourceType": "script"
+  },
+  "globals": {
+    "angular": false,
+    "interact": false
+  },
+  "rules": {
+    "comma-dangle": ["error", "never"],
+    "func-names": "off",
+    "indent": ["error", 4, { "SwitchCase": 1, "VariableDeclarator": 1, "outerIIFEBody": 1 }],
+    "max-len": "off",
+    "no-mixed-operators": "off",
+    "object-curly-spacing": "off",
+    "one-var": "off",
+    "space-before-function-paren": ["error", "never"],
+    "vars-on-top": "off"
+  }
+}
