@@ -1,10 +1,10 @@
 'use strict';
 
 // Load grunt tasks automatically
-var loadGrunTasks = require('load-grunt-tasks');
+var loadGruntTasks = require('load-grunt-tasks');
 
 module.exports = function(grunt) {
-    loadGrunTasks(grunt);
+    loadGruntTasks(grunt);
 
     grunt.initConfig({
 
