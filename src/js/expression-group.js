@@ -114,9 +114,37 @@ angular.module('ngEquation')
                                 groupCtrl.addOperand(operandCtrl.options);
                             });
 
-                            scope.$apply(function() {
-                                operandCtrl.removeFromGroup();
-                            });
+                            if (operandCtrl.group) {
+
+                                // remove from old group
+
+                                scope.$apply(function() {
+                                    operandCtrl.removeFromGroup();
+                                });
+
+                            } else {
+
+                                // restore operand's snap target to its original position
+
+                                event.draggable.draggable({
+                                    snap: {
+                                        targets: [{
+                                            x: parseFloat(event.relatedTarget.getAttribute('data-start-x')),
+                                            y: parseFloat(event.relatedTarget.getAttribute('data-start-y'))
+                                        }]
+                                    }
+                                });
+
+                                // move operand to its original position
+
+                                event.relatedTarget.style.webkitTransform =
+                                    event.relatedTarget.style.transform =
+                                        'none';
+
+                                event.relatedTarget.setAttribute('data-x', 0);
+                                event.relatedTarget.setAttribute('data-y', 0);
+
+                            }
                         },
                         ondropdeactivate: function(event) {
                             event.target.classList.remove('drop-active');
