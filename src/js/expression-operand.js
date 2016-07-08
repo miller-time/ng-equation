@@ -75,10 +75,12 @@ angular.module('ngEquation')
                             var existingOperandScope = angular.element(dropElement).scope();
                             if (existingOperandScope) {
                                 var existingOperandCtrl = existingOperandScope.operand;
-                                if (dropped && existingOperandCtrl.group) {
+                                if (dropped && existingOperandCtrl) {
                                     var newOperandCtrl = angular.element(draggableElement).scope().operand;
 
-                                    return dropped && (existingOperandCtrl.group.getIndexOfOperand(newOperandCtrl.options) === -1);
+                                    return dropped &&
+                                        (existingOperandCtrl.options.class !== newOperandCtrl.options.class ||
+                                         existingOperandCtrl.options.label !== newOperandCtrl.options.label);
                                 }
                             }
                             return false;
