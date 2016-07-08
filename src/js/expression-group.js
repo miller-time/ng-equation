@@ -74,6 +74,9 @@ angular.module('ngEquation')
                             event.relatedTarget.classList.add('can-drop');
 
                             // change operand's snap target to be this group
+                            // otherwise when the operand is dropped the drop event will be
+                            // triggered with the original location of the operand
+                            // (the snap happens before the drop is triggered)
 
                             var dropRect = interact.getElementRect(event.target),
                                 dropCenter = {
