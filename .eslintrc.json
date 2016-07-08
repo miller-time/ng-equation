@@ -1,11 +1,10 @@
 {
-  "extends": "airbnb-base/legacy",
+  "extends": ["airbnb-base/legacy", "angular"],
   "parserOptions": {
     "ecmaVersion": 5,
     "sourceType": "script"
   },
   "globals": {
-    "angular": false,
     "interact": false
   },
   "rules": {
