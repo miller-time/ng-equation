@@ -143,35 +143,33 @@ angular.module('ngEquation')
                             });
 
                             if (newOperandCtrl.group) {
-
                                 // remove from old group
 
                                 scope.$apply(function() {
                                     newOperandCtrl.removeFromGroup();
                                 });
-
                             } else {
-
                                 // restore new operand's snap target to its original position
+
+                                var newOperandElement = event.relatedTarget;
 
                                 event.draggable.draggable({
                                     snap: {
                                         targets: [{
-                                            x: parseFloat(event.relatedTarget.getAttribute('data-start-x')),
-                                            y: parseFloat(event.relatedTarget.getAttribute('data-start-y'))
+                                            x: parseFloat(newOperandElement.getAttribute('data-start-x')),
+                                            y: parseFloat(newOperandElement.getAttribute('data-start-y'))
                                         }]
                                     }
                                 });
 
                                 // move new operand to its original position
 
-                                event.relatedTarget.style.webkitTransform =
-                                    event.relatedTarget.style.transform =
+                                newOperandElement.style.webkitTransform =
+                                    newOperandElement.style.transform =
                                         'none';
 
-                                event.relatedTarget.setAttribute('data-x', 0);
-                                event.relatedTarget.setAttribute('data-y', 0);
-
+                                newOperandElement.setAttribute('data-x', 0);
+                                newOperandElement.setAttribute('data-y', 0);
                             }
                         },
                         ondropdeactivate: function(event) {
