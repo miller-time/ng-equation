@@ -135,7 +135,7 @@ angular.module('ngEquation')
                             });
 
                             scope.$apply(function() {
-                                operandCtrl.options.removeOperand(operandCtrl.options);
+                                operandCtrl.removeFromGroup();
                             });
                         },
                         ondropdeactivate: function(event) {

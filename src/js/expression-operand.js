@@ -4,14 +4,18 @@ angular.module('ngEquation')
     .controller('ExpressionOperandCtrl', function() {
         var ctrl = this;
 
-        // eslint-disable-next-line no-console, angular/log
-        console.log(ctrl.options.label);
+        ctrl.removeFromGroup = function() {
+            if (ctrl.group) {
+                ctrl.group.removeOperand(ctrl.options);
+            }
+        };
     })
     .directive('expressionOperand', function($templateCache) {
         return {
             restrict: 'EA',
             scope: {},
             bindToController: {
+                group: '=?',
                 options: '=operandOptions'
             },
             controller: 'ExpressionOperandCtrl',
@@ -71,10 +75,10 @@ angular.module('ngEquation')
                             var existingOperandScope = angular.element(dropElement).scope();
                             if (existingOperandScope) {
                                 var existingOperandCtrl = existingOperandScope.operand;
-                                if (dropped && existingOperandCtrl.options.group) {
+                                if (dropped && existingOperandCtrl.group) {
                                     var newOperandCtrl = angular.element(draggableElement).scope().operand;
 
-                                    return dropped && (existingOperandCtrl.options.group.getIndexOfOperand(newOperandCtrl.options) === -1);
+                                    return dropped && (existingOperandCtrl.group.getIndexOfOperand(newOperandCtrl.options) === -1);
                                 }
                             }
                             return false;
@@ -126,15 +130,15 @@ angular.module('ngEquation')
                                 existingOperandCtrl = angular.element(event.target).scope().operand;
 
                             scope.$apply(function() {
-                                existingOperandCtrl.options.group.addOperand({
+                                existingOperandCtrl.group.addOperand({
                                     operator: 'AND',
                                     operands: [existingOperandCtrl.options, newOperandCtrl.options]
                                 });
                             });
 
                             scope.$apply(function() {
-                                newOperandCtrl.options.removeOperand(newOperandCtrl.options);
-                                existingOperandCtrl.options.removeOperand(existingOperandCtrl.options);
+                                newOperandCtrl.removeFromGroup();
+                                existingOperandCtrl.removeFromGroup();
                             });
                         },
                         ondropdeactivate: function(event) {
