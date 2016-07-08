@@ -4,35 +4,8 @@ angular.module('ngEquation')
     .controller('ExpressionGroupCtrl', function() {
         var ctrl = this;
 
-        // extend this group's operands by supplying them with a method
-        // that removes them from the group when called
-        /* eslint-disable angular/controller-as-vm */
-        function OperandOptions(config) {
-            this.group = ctrl;
-            this.class = config.class;
-            this.label = config.label;
-            if (angular.isDefined(config.operator)) {
-                this.operator = config.operator;
-            }
-            if (angular.isDefined(config.operands)) {
-                this.operands = config.operands;
-            }
-        }
-
-        OperandOptions.prototype.removeOperand = function() {
-            var operandIndex = ctrl.getIndexOfOperand(this);
-            if (operandIndex !== -1) {
-                ctrl.operands.splice(operandIndex, 1);
-            }
-        };
-        /* eslint-enable angular/controller-as-vm */
-
-        ctrl.operands = ctrl.operands.map(function(operand) {
-            return new OperandOptions(operand);
-        });
-
         ctrl.addOperand = function(operand) {
-            ctrl.operands.push(new OperandOptions(operand));
+            ctrl.operands.push(operand);
         };
 
         ctrl.addSubgroup = function() {
@@ -54,6 +27,13 @@ angular.module('ngEquation')
 
         ctrl.removeSubgroup = function(subgroupId) {
             ctrl.operands.splice(subgroupId, 1);
+        };
+
+        ctrl.removeOperand = function(operand) {
+            var operandIndex = ctrl.getIndexOfOperand(operand);
+            if (operandIndex !== -1) {
+                ctrl.operands.splice(operandIndex, 1);
+            }
         };
     })
     .directive('expressionGroup', function($templateCache) {
@@ -94,6 +74,9 @@ angular.module('ngEquation')
                             event.relatedTarget.classList.add('can-drop');
 
                             // change operand's snap target to be this group
+                            // otherwise when the operand is dropped the drop event will be
+                            // triggered with the original location of the operand
+                            // (the snap happens before the drop is triggered)
 
                             var dropRect = interact.getElementRect(event.target),
                                 dropCenter = {
@@ -134,9 +117,35 @@ angular.module('ngEquation')
                                 groupCtrl.addOperand(operandCtrl.options);
                             });
 
-                            scope.$apply(function() {
-                                operandCtrl.options.removeOperand(operandCtrl.options);
-                            });
+                            if (operandCtrl.group) {
+                                // remove from old group
+
+                                scope.$apply(function() {
+                                    operandCtrl.removeFromGroup();
+                                });
+                            } else {
+                                // restore operand's snap target to its original position
+
+                                var operandElement = event.relatedTarget;
+
+                                event.draggable.draggable({
+                                    snap: {
+                                        targets: [{
+                                            x: parseFloat(operandElement.getAttribute('data-start-x')),
+                                            y: parseFloat(operandElement.getAttribute('data-start-y'))
+                                        }]
+                                    }
+                                });
+
+                                // move operand to its original position
+
+                                operandElement.style.webkitTransform =
+                                    operandElement.style.transform =
+                                        'none';
+
+                                operandElement.setAttribute('data-x', 0);
+                                operandElement.setAttribute('data-y', 0);
+                            }
                         },
                         ondropdeactivate: function(event) {
                             event.target.classList.remove('drop-active');

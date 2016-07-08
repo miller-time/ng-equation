@@ -4,8 +4,8 @@
         {{operand.options.label}}
 
         <button class="eq-remove-operand"
-            ng-if="operand.options.group"
-            ng-click="operand.options.removeOperand(operand.options)">
+            ng-if="operand.group"
+            ng-click="operand.removeFromGroup()">
             &times;
         </button>
     </span>

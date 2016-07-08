@@ -4,14 +4,18 @@ angular.module('ngEquation')
     .controller('ExpressionOperandCtrl', function() {
         var ctrl = this;
 
-        // eslint-disable-next-line no-console, angular/log
-        console.log(ctrl.options.label);
+        ctrl.removeFromGroup = function() {
+            if (ctrl.group) {
+                ctrl.group.removeOperand(ctrl.options);
+            }
+        };
     })
     .directive('expressionOperand', function($templateCache) {
         return {
             restrict: 'EA',
             scope: {},
             bindToController: {
+                group: '=?',
                 options: '=operandOptions'
             },
             controller: 'ExpressionOperandCtrl',
@@ -71,10 +75,12 @@ angular.module('ngEquation')
                             var existingOperandScope = angular.element(dropElement).scope();
                             if (existingOperandScope) {
                                 var existingOperandCtrl = existingOperandScope.operand;
-                                if (dropped && existingOperandCtrl.options.group) {
+                                if (dropped && existingOperandCtrl) {
                                     var newOperandCtrl = angular.element(draggableElement).scope().operand;
 
-                                    return dropped && (existingOperandCtrl.options.group.getIndexOfOperand(newOperandCtrl.options) === -1);
+                                    return dropped &&
+                                        (existingOperandCtrl.options.class !== newOperandCtrl.options.class ||
+                                         existingOperandCtrl.options.label !== newOperandCtrl.options.label);
                                 }
                             }
                             return false;
@@ -89,6 +95,9 @@ angular.module('ngEquation')
                             event.relatedTarget.classList.add('can-drop');
 
                             // change new operand's snap target to be the existing operand
+                            // otherwise when the new operand is dropped the drop event will be
+                            // triggered with the original location of the new operand
+                            // (the snap happens before the drop is triggered)
 
                             var dropRect = interact.getElementRect(event.target),
                                 dropCenter = {
@@ -126,16 +135,45 @@ angular.module('ngEquation')
                                 existingOperandCtrl = angular.element(event.target).scope().operand;
 
                             scope.$apply(function() {
-                                existingOperandCtrl.options.group.addOperand({
+                                existingOperandCtrl.group.addOperand({
                                     operator: 'AND',
                                     operands: [existingOperandCtrl.options, newOperandCtrl.options]
                                 });
                             });
 
                             scope.$apply(function() {
-                                newOperandCtrl.options.removeOperand(newOperandCtrl.options);
-                                existingOperandCtrl.options.removeOperand(existingOperandCtrl.options);
+                                existingOperandCtrl.removeFromGroup();
                             });
+
+                            if (newOperandCtrl.group) {
+                                // remove from old group
+
+                                scope.$apply(function() {
+                                    newOperandCtrl.removeFromGroup();
+                                });
+                            } else {
+                                // restore new operand's snap target to its original position
+
+                                var newOperandElement = event.relatedTarget;
+
+                                event.draggable.draggable({
+                                    snap: {
+                                        targets: [{
+                                            x: parseFloat(newOperandElement.getAttribute('data-start-x')),
+                                            y: parseFloat(newOperandElement.getAttribute('data-start-y'))
+                                        }]
+                                    }
+                                });
+
+                                // move new operand to its original position
+
+                                newOperandElement.style.webkitTransform =
+                                    newOperandElement.style.transform =
+                                        'none';
+
+                                newOperandElement.setAttribute('data-x', 0);
+                                newOperandElement.setAttribute('data-y', 0);
+                            }
                         },
                         ondropdeactivate: function(event) {
                             event.target.classList.remove('drop-active');
