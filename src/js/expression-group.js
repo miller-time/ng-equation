@@ -6,7 +6,7 @@ angular.module('ngEquation')
 
         // extend this group's operands by supplying them with a method
         // that removes them from the group when called
-
+        /* eslint-disable angular/controller-as-vm */
         function OperandOptions(config) {
             this.group = ctrl;
             this.class = config.class;
@@ -25,6 +25,7 @@ angular.module('ngEquation')
                 ctrl.operands.splice(operandIndex, 1);
             }
         };
+        /* eslint-enable angular/controller-as-vm */
 
         ctrl.operands = ctrl.operands.map(function(operand) {
             return new OperandOptions(operand);
@@ -52,7 +53,7 @@ angular.module('ngEquation')
         };
 
         ctrl.removeSubgroup = function(subgroupId) {
-            this.operands.splice(subgroupId, 1);
+            ctrl.operands.splice(subgroupId, 1);
         };
     })
     .directive('expressionGroup', function($templateCache) {

@@ -4,7 +4,7 @@ angular.module('ngEquation')
     .controller('ExpressionOperandCtrl', function() {
         var ctrl = this;
 
-        // eslint-disable-next-line no-console
+        // eslint-disable-next-line no-console, angular/log
         console.log(ctrl.options.label);
     })
     .directive('expressionOperand', function($templateCache) {

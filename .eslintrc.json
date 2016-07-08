@@ -1,14 +1,15 @@
 {
-  "extends": "airbnb-base/legacy",
+  "extends": ["airbnb-base/legacy", "angular"],
   "parserOptions": {
     "ecmaVersion": 5,
     "sourceType": "script"
   },
   "globals": {
-    "angular": false,
     "interact": false
   },
   "rules": {
+    "angular/controller-as-vm": [2, "ctrl"],
+    "angular/controller-name": [2,"/[A-Z].*Ctrl/"],
     "comma-dangle": ["error", "never"],
     "func-names": "off",
     "indent": ["error", 4, { "SwitchCase": 1, "VariableDeclarator": 1, "outerIIFEBody": 1 }],

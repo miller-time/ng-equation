@@ -1,9 +1,10 @@
 'use strict';
 
-module.exports = function(grunt) {
+// Load grunt tasks automatically
+var loadGruntTasks = require('load-grunt-tasks');
 
-    // Load grunt tasks automatically
-    require('load-grunt-tasks')(grunt);
+module.exports = function(grunt) {
+    loadGruntTasks(grunt);
 
     grunt.initConfig({
 
@@ -23,9 +24,9 @@ module.exports = function(grunt) {
                             var match = /^src\/(.*)/.exec(srcPath);
                             if (match && match[1]) {
                                 return 'dist/.tmp/' + match[1];
-                            } else {
-                                grunt.fail.fatal('error parsing src file: ' + srcPath);
                             }
+                            grunt.fail.fatal('error parsing src file: ' + srcPath);
+                            return undefined;
                         }
                     }
                 ]
@@ -85,8 +86,19 @@ module.exports = function(grunt) {
 
         eslint: {
             target: [
-                'src/**/*.js'
+                'src/**/*.js',
+                'test/**/*.js',
+                'karma.conf.js',
+                'Gruntfile.js'
             ]
+        },
+
+        // Test settings
+        karma: {
+            continuous: {
+                configFile: 'karma.conf.js',
+                singleRun: true
+            }
         }
 
     });
@@ -98,8 +110,12 @@ module.exports = function(grunt) {
         'clean'
     ]);
 
+    grunt.registerTask('test', [
+        'karma:continuous',
+        'eslint'
+    ]);
+
     grunt.registerTask('default', [
         'build'
     ]);
-
 };

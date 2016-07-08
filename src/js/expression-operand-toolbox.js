@@ -6,7 +6,7 @@ angular.module('ngEquation')
 
         // extend the operands in the toolbox by supplying them with a method
         // that removes them from the toolbox, followed by a toolbox refresh
-
+        /* eslint-disable angular/controller-as-vm */
         function OperandOptions(config) {
             this.class = config.class;
             this.label = config.label;
@@ -15,6 +15,7 @@ angular.module('ngEquation')
         OperandOptions.prototype.removeOperand = function() {
             ctrl.refresh(ctrl.getIndexOfOperand(this));
         };
+        /* eslint-enable angular/controller-as-vm */
 
         ctrl.getIndexOfOperand = function(operand) {
             for (var i = 0; i < ctrl.operands.length; ++i) {

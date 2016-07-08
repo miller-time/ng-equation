@@ -50,3 +50,11 @@ Rebuild
 ```
 grunt build
 ```
+
+Run Tests
+
+(this will run unit tests and code linter)
+
+```
+grunt test
+```
