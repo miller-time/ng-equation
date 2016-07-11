@@ -147,6 +147,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('deployDemo', [
+        'build',
         'buildcontrol:demo'
     ]);
 
