@@ -122,8 +122,7 @@ angular.module('ngEquation')
                                     var newOperandCtrl = angular.element(draggableElement).scope().operand;
 
                                     return dropped &&
-                                        (existingOperandCtrl.options.class !== newOperandCtrl.options.class ||
-                                         existingOperandCtrl.options.label !== newOperandCtrl.options.label);
+                                        (existingOperandCtrl.options.value !== newOperandCtrl.options.value);
                                 }
                             }
                             return false;
