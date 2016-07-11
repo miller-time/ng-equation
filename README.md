@@ -18,6 +18,7 @@ Add the following to your html (angular and interact are required dependencies)
 
 ```html
 <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="ng-equation/dist/ng-equation.css">
 
 <script src="jquery/dist/jquery.min.js"></script>
 <script src="angular/angular.min.js"></script>

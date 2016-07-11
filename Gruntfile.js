@@ -135,12 +135,24 @@ module.exports = function(grunt) {
             src: ['less/**/*.less']
         },
 
+        less: {
+            dist: {
+                files: {
+                    'dist/ng-equation.css': 'less/ng-equation.less'
+                },
+                options: {
+                    compress: true
+                }
+            }
+        }
+
     });
 
     grunt.registerTask('build', [
         'ngAnnotate',
         'uglify',
         'html2js',
+        'less',
         'clean',
         'copy:demo'
     ]);
