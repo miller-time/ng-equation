@@ -51,7 +51,7 @@ describe('expressionOperand directive', function() {
         it('should raise an operand type exception', function() {
             instantiate({class: 2, label: 'Foo'});
             expect($exceptionHandler.errors[0].toString()).toEqual(
-                'Operand options property "class" is incorrect type. Expected: "number". Got: "string".'
+                'Operand options property "class" is incorrect type. Expected: "string". Got: "number".'
             );
         });
     });

@@ -20,8 +20,8 @@ angular.module('ngEquation')
             this.propertyType = propertyType;
             this.toString = function() {
                 return 'Operand options property "' + this.property + '" is incorrect type. ' +
-                    'Expected: "' + this.propertyType + '". ' +
-                    'Got: "' + this.expectedType + '".';
+                    'Expected: "' + this.expectedType + '". ' +
+                    'Got: "' + this.propertyType + '".';
             };
         }
 
