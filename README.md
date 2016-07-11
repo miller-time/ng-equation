@@ -3,6 +3,8 @@ ng-equation
 
 Boolean Equation Builder for complex data
 
+[Demo](https://miller-time.github.io/ng-equation/)
+
 
 ### Installation
 
@@ -33,7 +35,7 @@ angular.module('myApp', ['ngEquation']);
 
 ### Development
 
-First time setup
+##### First time setup
 
 (this will install the project dependencies and build the distribution files from source)
 
@@ -43,7 +45,7 @@ bower install
 grunt
 ```
 
-Rebuild
+##### Rebuild
 
 (do this after making changes)
 
@@ -51,10 +53,24 @@ Rebuild
 grunt build
 ```
 
-Run Tests
+##### Run Tests
 
 (this will run unit tests and code linter)
 
 ```
 grunt test
+```
+
+##### Demo
+Open demo/index.html in browser
+
+### Release
+
+
+##### Demo Site - [GitHub Page](https://miller-time.github.io/ng-equation/)
+
+(deploys the directory demo to the gh-pages branch)
+
+```
+grunt deployDemo
 ```
