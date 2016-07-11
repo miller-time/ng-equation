@@ -5,7 +5,7 @@ angular.module('ngEquation')
         var ctrl = this;
 
         ctrl.addOperand = function(operand) {
-            ctrl.operands.push(operand);
+            ctrl.operands.push(angular.copy(operand));
         };
 
         ctrl.addSubgroup = function() {
