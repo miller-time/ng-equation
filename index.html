@@ -1,0 +1,98 @@
+<!doctype html>
+<html ng-app="exampleApp">
+<head>
+    <title>ng-equation</title>
+
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="bower_components/interact/interact.js"></script>
+    <script src="dist/ng-equation.js"></script>
+    <script src="dist/ng-equation-templates.js"></script>
+
+    <script>
+        angular.module('exampleApp', ['ngEquation'])
+            .controller('ExampleCtrl', function() {
+                var ctrl = this;
+
+                ctrl.availableOperands = [
+                    {label: 'A', class: 'a'},
+                    {label: 'B', class: 'b'},
+                    {label: 'C', class: 'c'},
+                    {label: 'D', class: 'd'},
+                    {label: 'E', class: 'e'},
+                    {label: 'F', class: 'f'}
+                ];
+
+                ctrl.config = {
+                    availableOperands: ctrl.availableOperands
+                };
+
+                ctrl.equationOne = {
+                    operator: 'OR',
+                    operands: [
+                        {label: 'A', class: 'a'},
+                        {label: 'B', class: 'b'},
+                        {label: 'C', class: 'c'},
+                        {
+                            operator: 'AND',
+                            operands: [
+                                {label: 'D', class: 'd'},
+                                {label: 'E', class: 'e'},
+                                {label: 'F', class: 'f'}
+                            ]
+                        }
+                    ]
+                };
+
+                ctrl.equationTwo = {
+                    operator: 'AND NOT',
+                    operands: [
+                        {label: 'X', class: 'a'},
+                        {label: 'Y', class: 'b'},
+                        {label: 'Z', class: 'c'}
+                    ]
+                };
+            });
+    </script>
+</head>
+<body ng-controller="ExampleCtrl as example">
+    <p>
+        <equation
+            equation-options="example.config">
+        </equation>
+    </p>
+
+    <label>
+        Other Examples
+        <input type="checkbox" ng-model="example.showOtherExamples">
+    </label>
+
+    <div ng-show="example.showOtherExamples">
+        <p>
+            <label>Toolbox</label>
+            <expression-operand-toolbox
+                operands="example.availableOperands">
+            </expression-operand-toolbox>
+        </p>
+
+        <p>
+            <expression-group
+                operator="{{example.equationOne.operator}}"
+                operands="example.equationOne.operands">
+            </expression-group>
+        </p>
+
+        <p>
+            <expression-group
+                operator="{{example.equationTwo.operator}}"
+                operands="example.equationTwo.operands">
+            </expression-group>
+        </p>
+    </div>
+</body>
+</html>
