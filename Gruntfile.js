@@ -129,7 +129,11 @@ module.exports = function(grunt) {
                     message: 'Built demo from commit %sourceCommit% on branch %sourceBranch%'
                 }
             }
-        }
+        },
+
+        lesslint: {
+            src: ['less/**/*.less']
+        },
 
     });
 
@@ -143,7 +147,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask('test', [
         'karma:continuous',
-        'eslint'
+        'eslint',
+        'lesslint'
     ]);
 
     grunt.registerTask('deployDemo', [
