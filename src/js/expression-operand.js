@@ -8,21 +8,13 @@ angular.module('ngEquation')
         };
 
         function MissingOperandOptionException(property) {
-            this.property = property;
-            this.toString = function() {
-                return 'Operand options missing required property "' + this.property + '".';
-            };
+            this.error = 'Operand options missing required property "' + property + '".';
         }
 
         function OperandOptionTypeException(property, expectedType, propertyType) {
-            this.property = property;
-            this.expectedType = expectedType;
-            this.propertyType = propertyType;
-            this.toString = function() {
-                return 'Operand options property "' + this.property + '" is incorrect type. ' +
-                    'Expected: "' + this.expectedType + '". ' +
-                    'Got: "' + this.propertyType + '".';
-            };
+            this.error = 'Operand options property "' + property + '" is incorrect type. ' +
+                'Expected: "' + expectedType + '". ' +
+                'Got: "' + propertyType + '".';
         }
 
         return {

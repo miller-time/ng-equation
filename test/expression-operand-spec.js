@@ -41,7 +41,7 @@ describe('expressionOperand directive', function() {
     describe('with required options missing', function() {
         it('should raise a missing operand exception', function() {
             instantiate({class: 'foo'});
-            expect($exceptionHandler.errors[0].toString()).toEqual(
+            expect($exceptionHandler.errors[0].error).toEqual(
                 'Operand options missing required property "label".'
             );
         });
@@ -50,7 +50,7 @@ describe('expressionOperand directive', function() {
     describe('with required option of incorrect type', function() {
         it('should raise an operand type exception', function() {
             instantiate({class: 2, label: 'Foo'});
-            expect($exceptionHandler.errors[0].toString()).toEqual(
+            expect($exceptionHandler.errors[0].error).toEqual(
                 'Operand options property "class" is incorrect type. Expected: "string". Got: "number".'
             );
         });
