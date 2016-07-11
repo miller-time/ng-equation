@@ -116,6 +116,19 @@ module.exports = function(grunt) {
                     }
                 ]
             }
+        },
+
+        buildcontrol: {
+            demo: {
+                options: {
+                    dir: 'demo',
+                    branch: 'gh-pages',
+                    commit: true,
+                    push: true,
+                    remote: 'git@github.com:miller-time/ng-equation.git',
+                    message: 'Built demo from commit %sourceCommit% on branch %sourceBranch%'
+                }
+            }
         }
 
     });
@@ -131,6 +144,10 @@ module.exports = function(grunt) {
     grunt.registerTask('test', [
         'karma:continuous',
         'eslint'
+    ]);
+
+    grunt.registerTask('deployDemo', [
+        'buildcontrol:demo'
     ]);
 
     grunt.registerTask('default', [
