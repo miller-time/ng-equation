@@ -1,8 +1,46 @@
 'use strict';
 
 angular.module('ngEquation')
-    .controller('ExpressionOperandCtrl', function() {
+    .factory('operandOptions', function() {
+        var operandOptionsApi = {
+            class: 'string',
+            label: 'string'
+        };
+
+        function MissingOperandOptionException(property) {
+            this.property = property;
+            this.toString = function() {
+                return 'Operand options missing required property "' + property + '".';
+            };
+        }
+
+        function OperandOptionTypeException(property, expectedType, propertyType) {
+            this.property = property;
+            this.expectedType = expectedType;
+            this.propertyType = propertyType;
+            this.toString = function() {
+                return 'Operand options property "' + this.property + '" is incorrect type. ' +
+                    'Expected: "' + this.propertyType + '". ' +
+                    'Got: "' + this.expectedType + '".';
+            };
+        }
+
+        return {
+            validate: function(obj) {
+                angular.forEach(operandOptionsApi, function(propertyType, apiProperty) {
+                    if (!obj[apiProperty]) {
+                        throw new MissingOperandOptionException(apiProperty);
+                    } else if (typeof(obj[apiProperty]) !== propertyType) {
+                        throw new OperandOptionTypeException(apiProperty, propertyType, typeof(obj[apiProperty]));
+                    }
+                });
+            }
+        };
+    })
+    .controller('ExpressionOperandCtrl', function(operandOptions) {
         var ctrl = this;
+
+        operandOptions.validate(ctrl.options);
 
         ctrl.removeFromGroup = function() {
             if (ctrl.group) {
