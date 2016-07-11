@@ -78,7 +78,9 @@ describe('expressionOperand directive', function() {
                 class: 'foo',
                 typeLabel: 'Foo',
                 getLabel: jasmine.createSpy('fooOperand.getLabel'),
-                editMetadata: jasmine.createSpy('fooOperand.editMetadata')
+                editMetadata: jasmine.createSpy('fooOperand.editMetadata').and.callFake(function() {
+                    return 'newValue';
+                })
             };
             controller = instantiate(operandOptions);
         });
@@ -89,8 +91,12 @@ describe('expressionOperand directive', function() {
         });
 
         it('should have an "editMetadata" method for setting its value', function() {
-            controller.options.editMetadata();
+            controller.editMetadata();
             expect(operandOptions.editMetadata).toHaveBeenCalled();
+
+            // trigger `$q.when()` wrapped around result
+            $scope.$apply();
+            expect(controller.options.value).toEqual('newValue');
         });
     });
 

@@ -31,7 +31,7 @@ angular.module('ngEquation')
             }
         };
     })
-    .controller('ExpressionOperandCtrl', function(operandOptions) {
+    .controller('ExpressionOperandCtrl', function($q, operandOptions) {
         var ctrl = this;
 
         operandOptions.validate(ctrl.options);
@@ -43,7 +43,10 @@ angular.module('ngEquation')
         };
 
         ctrl.editMetadata = function() {
-            ctrl.options.editMetadata();
+            var editResult = ctrl.options.editMetadata();
+            $q.when(editResult).then(function(result) {
+                ctrl.options.value = result;
+            });
         };
 
         if (ctrl.group) {
