@@ -99,6 +99,36 @@ module.exports = function(grunt) {
                 configFile: 'karma.conf.js',
                 singleRun: true
             }
+        },
+
+        copy: {
+            demo: {
+                files: [
+                    {
+                        expand: true,
+                        src: ['bower_components/**'],
+                        dest: 'demo/'
+                    },
+                    {
+                        expand: true,
+                        src: ['dist/**'],
+                        dest: 'demo/'
+                    }
+                ]
+            }
+        },
+
+        buildcontrol: {
+            demo: {
+                options: {
+                    dir: 'demo',
+                    branch: 'gh-pages',
+                    commit: true,
+                    push: true,
+                    remote: 'git@github.com:miller-time/ng-equation.git',
+                    message: 'Built demo from commit %sourceCommit% on branch %sourceBranch%'
+                }
+            }
         }
 
     });
@@ -107,12 +137,18 @@ module.exports = function(grunt) {
         'ngAnnotate',
         'uglify',
         'html2js',
-        'clean'
+        'clean',
+        'copy:demo'
     ]);
 
     grunt.registerTask('test', [
         'karma:continuous',
         'eslint'
+    ]);
+
+    grunt.registerTask('deployDemo', [
+        'build',
+        'buildcontrol:demo'
     ]);
 
     grunt.registerTask('default', [
