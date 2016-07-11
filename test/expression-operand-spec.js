@@ -39,28 +39,43 @@ describe('expressionOperand directive', function() {
     }));
 
     describe('with required options missing', function() {
-        it('should raise a missing operand exception', function() {
-            instantiate({class: 'foo'});
+        it('should raise a missing option exception', function() {
+            var operandOptions = {
+                class: 'foo',
+                typeLabel: 'Foo'
+            };
+            instantiate(operandOptions);
             expect($exceptionHandler.errors[0].error).toEqual(
-                'Operand options missing required property "label".'
+                'Operand options missing required property "getLabel".'
             );
         });
     });
 
     describe('with required option of incorrect type', function() {
         it('should raise an operand type exception', function() {
-            instantiate({class: 2, label: 'Foo'});
+            var operandOptions = {
+                class: 'foo',
+                typeLabel: 'Foo',
+                getLabel: 'foo?'
+            };
+            instantiate(operandOptions);
             expect($exceptionHandler.errors[0].error).toEqual(
-                'Operand options property "class" is incorrect type. Expected: "string". Got: "number".'
+                'Operand options property "getLabel" is incorrect type. Expected: "function". Got: "string".'
             );
         });
     });
 
     describe('with valid options', function() {
-        it('should have class and label', function() {
-            var controller = instantiate({class: 'foo', label: 'Bar'});
-            expect(controller.options.class).toEqual('foo');
-            expect(controller.options.label).toEqual('Bar');
+        it('should have a "getLabel" method for displaying its value', function() {
+            var operandOptions = {
+                class: 'foo',
+                typeLabel: 'Foo',
+                getLabel: jasmine.createSpy('fooOperand.getLabel')
+            };
+            var controller = instantiate(operandOptions);
+
+            controller.options.getLabel();
+            expect(operandOptions.getLabel).toHaveBeenCalled();
         });
     });
 });

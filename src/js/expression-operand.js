@@ -4,7 +4,8 @@ angular.module('ngEquation')
     .factory('operandOptions', function() {
         var operandOptionsApi = {
             class: 'string',
-            label: 'string'
+            typeLabel: 'string',
+            getLabel: 'function'
         };
 
         function MissingOperandOptionException(property) {
