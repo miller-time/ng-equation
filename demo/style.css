@@ -115,6 +115,7 @@ label {
 .eq-toolbox-container {
     display: block;
     width: 100%;
+    padding-top: 25px;
 }
 
 .eq-toolbox {
