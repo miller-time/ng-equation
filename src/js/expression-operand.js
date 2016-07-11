@@ -10,7 +10,7 @@ angular.module('ngEquation')
         function MissingOperandOptionException(property) {
             this.property = property;
             this.toString = function() {
-                return 'Operand options missing required property "' + property + '".';
+                return 'Operand options missing required property "' + this.property + '".';
             };
         }
 
