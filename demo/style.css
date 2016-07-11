@@ -21,7 +21,7 @@ label {
     box-shadow: 0px 0px 3px 3px darkgray;
 }
 
-.eq-operand.a, .eq-operand-menu-item.a {
+.eq-operand.fruit, .eq-operand-menu-item.fruit {
     background-color: lightblue;
 }
 
