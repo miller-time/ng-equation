@@ -99,6 +99,23 @@ module.exports = function(grunt) {
                 configFile: 'karma.conf.js',
                 singleRun: true
             }
+        },
+
+        copy: {
+            demo: {
+                files: [
+                    {
+                        expand: true,
+                        src: ['bower_components/**'],
+                        dest: 'demo/'
+                    },
+                    {
+                        expand: true,
+                        src: ['dist/**'],
+                        dest: 'demo/'
+                    }
+                ]
+            }
         }
 
     });
@@ -107,7 +124,8 @@ module.exports = function(grunt) {
         'ngAnnotate',
         'uglify',
         'html2js',
-        'clean'
+        'clean',
+        'copy:demo'
     ]);
 
     grunt.registerTask('test', [
