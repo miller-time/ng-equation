@@ -5,6 +5,7 @@ angular.module('ngEquation')
         var operandOptionsApi = {
             class: 'string',
             typeLabel: 'string',
+            editMetadata: 'function',
             getLabel: 'function'
         };
 
@@ -40,6 +41,14 @@ angular.module('ngEquation')
                 ctrl.group.removeOperand(ctrl.options);
             }
         };
+
+        ctrl.editMetadata = function() {
+            ctrl.options.editMetadata();
+        };
+
+        if (ctrl.group) {
+            ctrl.editMetadata();
+        }
     })
     .directive('expressionOperand', function($templateCache) {
         return {
