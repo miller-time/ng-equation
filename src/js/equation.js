@@ -19,13 +19,21 @@ angular.module('ngEquation')
             }
             return value;
         };
+
+        if (angular.isFunction(ctrl.onReady)) {
+            var equationApi = {
+                value: ctrl.value
+            };
+            ctrl.onReady({equationApi: equationApi});
+        }
     })
     .directive('equation', function($templateCache) {
         return {
             restrict: 'EA',
             scope: {},
             bindToController: {
-                options: '=equationOptions'
+                options: '=equationOptions',
+                onReady: '&'
             },
             controller: 'EquationCtrl',
             controllerAs: 'equation',
