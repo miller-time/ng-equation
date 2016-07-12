@@ -2,39 +2,81 @@
 
 angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angular.module("ngEquation").controller("EquationCtrl", function() {
     var ctrl = this;
-    ctrl.topLevelGroup = {
+    if (ctrl.topLevelGroup = {
         operator: "AND",
-        operands: []
-    };
+        operands: [],
+        onReady: function(groupApi) {
+            ctrl.groupApi = groupApi;
+        }
+    }, ctrl.value = function() {
+        var value;
+        return ctrl.groupApi && (value = ctrl.groupApi.value()), value;
+    }, angular.isFunction(ctrl.onReady)) {
+        var equationApi = {
+            value: ctrl.value
+        };
+        ctrl.onReady({
+            equationApi: equationApi
+        });
+    }
 }).directive("equation", [ "$templateCache", function($templateCache) {
     return {
         restrict: "EA",
         scope: {},
         bindToController: {
-            options: "=equationOptions"
+            options: "=equationOptions",
+            "class": "@equationClass",
+            onReady: "&"
         },
         controller: "EquationCtrl",
         controllerAs: "equation",
         template: $templateCache.get("equation.html")
     };
 } ]), angular.module("ngEquation").controller("ExpressionGroupCtrl", function() {
+    function getValue(operand) {
+        var value;
+        return value = operand.operands ? {
+            operator: operand.operator,
+            children: operand.operands.map(function(childOperand) {
+                return getValue(childOperand);
+            })
+        } : {
+            itemType: operand["class"],
+            id: operand.value,
+            label: operand.getLabel(operand)
+        };
+    }
     var ctrl = this;
-    ctrl.addOperand = function(operand) {
-        ctrl.operands.push(operand);
+    if (ctrl.addOperand = function(operand) {
+        ctrl.operands.push(angular.copy(operand));
     }, ctrl.addSubgroup = function() {
         ctrl.addOperand({
             operator: "AND",
             operands: []
         });
     }, ctrl.getIndexOfOperand = function(operand) {
-        for (var i = 0; i < ctrl.operands.length; ++i) if (ctrl.operands[i]["class"] === operand["class"] && ctrl.operands[i].label === operand.label) return i;
+        for (var i = 0; i < ctrl.operands.length; ++i) if (ctrl.operands[i].value === operand.value) return i;
         return -1;
     }, ctrl.removeSubgroup = function(subgroupId) {
         ctrl.operands.splice(subgroupId, 1);
     }, ctrl.removeOperand = function(operand) {
         var operandIndex = ctrl.getIndexOfOperand(operand);
         operandIndex !== -1 && ctrl.operands.splice(operandIndex, 1);
-    };
+    }, ctrl.value = function() {
+        return {
+            operator: ctrl.operator,
+            children: ctrl.operands.map(function(operand) {
+                return getValue(operand);
+            })
+        };
+    }, angular.isFunction(ctrl.onReady)) {
+        var groupApi = {
+            value: ctrl.value
+        };
+        ctrl.onReady({
+            groupApi: groupApi
+        });
+    }
 }).directive("expressionGroup", [ "$templateCache", function($templateCache) {
     return {
         restrict: "EA",
@@ -42,9 +84,10 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         bindToController: {
             parent: "=?",
             subgroupId: "@",
-            operator: "@",
+            operator: "=",
             operands: "=",
-            availableOperands: "="
+            availableOperands: "=",
+            onReady: "&"
         },
         controller: "ExpressionGroupCtrl",
         controllerAs: "group",
@@ -123,12 +166,38 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         controllerAs: "toolbox",
         template: $templateCache.get("expression-operand-toolbox.html")
     };
-} ]), angular.module("ngEquation").controller("ExpressionOperandCtrl", function() {
-    var ctrl = this;
-    ctrl.removeFromGroup = function() {
-        ctrl.group && ctrl.group.removeOperand(ctrl.options);
+} ]), angular.module("ngEquation").factory("operandOptions", function() {
+    function MissingOperandOptionException(property) {
+        this.error = 'Operand options missing required property "' + property + '".';
+    }
+    function OperandOptionTypeException(property, expectedType, propertyType) {
+        this.error = 'Operand options property "' + property + '" is incorrect type. Expected: "' + expectedType + '". Got: "' + propertyType + '".';
+    }
+    var operandOptionsApi = {
+        "class": "string",
+        typeLabel: "string",
+        editMetadata: "function",
+        getLabel: "function"
     };
-}).directive("expressionOperand", [ "$templateCache", function($templateCache) {
+    return {
+        validate: function(obj) {
+            angular.forEach(operandOptionsApi, function(propertyType, apiProperty) {
+                if (!obj[apiProperty]) throw new MissingOperandOptionException(apiProperty);
+                if (typeof obj[apiProperty] !== propertyType) throw new OperandOptionTypeException(apiProperty, propertyType, (typeof obj[apiProperty]));
+            });
+        }
+    };
+}).controller("ExpressionOperandCtrl", [ "$q", "operandOptions", function($q, operandOptions) {
+    var ctrl = this;
+    operandOptions.validate(ctrl.options), ctrl.removeFromGroup = function() {
+        ctrl.group && ctrl.group.removeOperand(ctrl.options);
+    }, ctrl.editMetadata = function() {
+        var editResult = ctrl.options.editMetadata();
+        $q.when(editResult).then(function(result) {
+            ctrl.options.value = result;
+        });
+    }, ctrl.group && ctrl.editMetadata();
+} ]).directive("expressionOperand", [ "$templateCache", function($templateCache) {
     return {
         restrict: "EA",
         scope: {},
@@ -178,7 +247,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
                         var existingOperandCtrl = existingOperandScope.operand;
                         if (dropped && existingOperandCtrl) {
                             var newOperandCtrl = angular.element(draggableElement).scope().operand;
-                            return dropped && (existingOperandCtrl.options["class"] !== newOperandCtrl.options["class"] || existingOperandCtrl.options.label !== newOperandCtrl.options.label);
+                            return dropped && existingOperandCtrl.options.value !== newOperandCtrl.options.value;
                         }
                     }
                     return !1;

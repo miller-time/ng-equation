@@ -1,0 +1,14 @@
+<div class="modal-body">
+    <div class="form-group">
+        <label>Fruit</label>
+        <select
+            class="form-control"
+            ng-options="fruit.label for fruit in fruits track by fruit.value"
+            ng-model="fruit.selected">
+        </select>
+    </div>
+</div>
+<div class="modal-footer">
+    <button ng-click="submit()">Submit</button>
+    <button ng-click="cancel()">Cancel</button>
+</div>

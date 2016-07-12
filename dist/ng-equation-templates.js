@@ -2,7 +2,7 @@ angular.module('ngEquation.templates', ['equation.html', 'expression-group.html'
 
 angular.module("equation.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("equation.html",
-    "<span class=\"eq-equation\">\n" +
+    "<span class=\"ng-equation\" ng-class=\"equation.class\">\n" +
     "\n" +
     "    <span class=\"eq-toolbox-container\">\n" +
     "        <label class=\"eq-toolbox-label\">\n" +
@@ -15,8 +15,9 @@ angular.module("equation.html", []).run(["$templateCache", function($templateCac
     "\n" +
     "    <span class=\"top-level-group\">\n" +
     "        <expression-group\n" +
-    "            operator=\"{{equation.topLevelGroup.operator}}\"\n" +
+    "            operator=\"equation.topLevelGroup.operator\"\n" +
     "            operands=\"equation.topLevelGroup.operands\"\n" +
+    "            on-ready=\"equation.topLevelGroup.onReady(groupApi)\"\n" +
     "            available-operands=\"equation.options.availableOperands\">\n" +
     "        </expression-group>\n" +
     "    </span>\n" +
@@ -39,7 +40,7 @@ angular.module("expression-group.html", []).run(["$templateCache", function($tem
     "            <expression-group\n" +
     "                parent=\"group\"\n" +
     "                subgroup-id=\"{{$index}}\"\n" +
-    "                operator=\"{{operand.operator}}\"\n" +
+    "                operator=\"operand.operator\"\n" +
     "                operands=\"operand.operands\"\n" +
     "                available-operands=\"group.availableOperands\">\n" +
     "            </expression-group>\n" +
@@ -86,7 +87,7 @@ angular.module("expression-group.html", []).run(["$templateCache", function($tem
     "                ng-class=\"availableOperand.class\"\n" +
     "                class=\"eq-operand-menu-item\">\n" +
     "                <a href ng-click=\"group.addOperand(availableOperand)\">\n" +
-    "                    {{availableOperand.label || 'Add Subgroup'}}\n" +
+    "                    {{availableOperand.typeLabel || 'Add Subgroup'}}\n" +
     "                </a>\n" +
     "            </li>\n" +
     "            <li>\n" +
@@ -127,7 +128,12 @@ angular.module("expression-operand.html", []).run(["$templateCache", function($t
     "<span style=\"display: inline-block\">\n" +
     "    <span class=\"eq-operand\" style=\"display: inline-block\"\n" +
     "        ng-class=\"operand.options.class\">\n" +
-    "        {{operand.options.label}}\n" +
+    "        <span ng-if=\"operand.options.value\">\n" +
+    "            {{operand.options.getLabel(operand.options)}}\n" +
+    "        </span>\n" +
+    "        <span ng-if=\"!operand.options.value\">\n" +
+    "            {{operand.options.typeLabel}}\n" +
+    "        </span>\n" +
     "\n" +
     "        <button class=\"eq-remove-operand\"\n" +
     "            ng-if=\"operand.group\"\n" +
