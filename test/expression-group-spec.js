@@ -16,12 +16,13 @@ describe('expressionGroup directive', function() {
 
     beforeEach(inject(function($compile, $rootScope) {
         $scope = $rootScope.$new();
+        $scope.myOperator = 'AND';
         $scope.myOperands = [];
         $scope.myAvailableOperands = [];
 
         var element = angular.element(
             '<expression-group ' +
-                'operator="AND" ' +
+                'operator="myOperator" ' +
                 'operands="myOperands" ' +
                 'available-operands="myAvailableOperands">' +
             '</expression-group>'

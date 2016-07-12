@@ -77,7 +77,7 @@ angular.module('ngEquation')
             bindToController: {
                 parent: '=?',
                 subgroupId: '@',
-                operator: '@',
+                operator: '=',
                 operands: '=',
                 availableOperands: '=',
                 onReady: '&'
