@@ -143,7 +143,7 @@ module.exports = function(grunt) {
         less: {
             dist: {
                 files: {
-                    'dist/ng-equation.css': 'less/ng-equation.less'
+                    'dist/ng-equation.css': 'less/**/*.less'
                 },
                 options: {
                     compress: true

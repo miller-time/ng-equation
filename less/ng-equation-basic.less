@@ -1,0 +1,26 @@
+.ng-equation.basic {
+
+    .eq-operand {
+        &.can-drop {
+            box-shadow: 0 0 3px 3px darkgray;
+        }
+
+        &.drop-target {
+            box-shadow: 0 0 7px 3px #00ec00;
+        }
+    }
+
+    .eq-group {
+        .eq-new-operand {
+
+            &.drop-target {
+                background-color: #00ec00;
+                color: white;
+            }
+        }
+    }
+
+    .eq-remove-group {
+        background-color: red;
+    }
+}

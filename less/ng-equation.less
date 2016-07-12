@@ -8,8 +8,7 @@
 
     .eq-operand {
         position: relative;
-        color: white;
-        border: 1px solid transparent;
+        border: 1px solid black;
         border-radius: 5px;
         padding: 10px;
         cursor: pointer;
@@ -19,15 +18,6 @@
         -ms-transform: translate(0, 0);
         -o-transform: translate(0, 0);
         transform: translate(0, 0);
-
-        &.can-drop {
-            box-shadow: 0 0 3px 3px darkgray;
-
-        }
-
-        &.drop-target {
-            box-shadow: 0 0 7px 3px #00ec00;
-        }
     }
 
     .eq-remove-operand {
@@ -40,7 +30,6 @@
     }
 
     .eq-operator {
-        background-color: lightgray;
         border: 1px solid transparent;
         border-radius: 5px;
         padding: 4px;
@@ -63,12 +52,6 @@
             border-radius: 5px;
             padding: 5px 10px;
             margin-left: 10px;
-            background-color: lightgray;
-
-            &.drop-target {
-                background-color: #00ec00;
-                color: white;
-            }
         }
     }
 
@@ -80,7 +63,6 @@
         padding: 0;
         border: 1px solid transparent;
         border-radius: 3px;
-        background-color: red;
         color: white;
     }
 
