@@ -43,15 +43,15 @@ angular.module('myApp', ['ngEquation']);
 ```
 npm install
 bower install
-grunt
-```
-
-##### Rebuild
-
-(do this after making changes)
-
-```
 grunt build
+```
+
+##### Watch for changes and rebuild
+
+(builds the distribution files and runs tests as needed as source files change)
+
+```
+grunt
 ```
 
 ##### Run Tests

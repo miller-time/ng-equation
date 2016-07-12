@@ -144,6 +144,25 @@ module.exports = function(grunt) {
                     compress: true
                 }
             }
+        },
+
+        watch: {
+            js: {
+                files: ['src/**/*.js'],
+                tasks: ['ngAnnotate', 'uglify', 'clean', 'copy:demo', 'karma:continuous', 'eslint']
+            },
+            less: {
+                files: ['less/**/*.less'],
+                tasks: ['less', 'copy:demo', 'lesslint']
+            },
+            templates: {
+                files: ['src/templates/**/*.html'],
+                tasks: ['html2js', 'copy:demo']
+            },
+            test: {
+                files: ['test/**/*.js'],
+                tasks: ['karma:continuous']
+            }
         }
 
     });
@@ -169,6 +188,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('default', [
-        'build'
+        'build',
+        'watch'
     ]);
 };
