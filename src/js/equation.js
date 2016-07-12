@@ -11,6 +11,14 @@ angular.module('ngEquation')
                 ctrl.groupApi = groupApi;
             }
         };
+
+        ctrl.value = function() {
+            var value;
+            if (ctrl.groupApi) {
+                value = ctrl.groupApi.value();
+            }
+            return value;
+        };
     })
     .directive('equation', function($templateCache) {
         return {

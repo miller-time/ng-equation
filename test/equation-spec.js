@@ -28,4 +28,11 @@ describe('equation directive', function() {
             onReady: jasmine.any(Function)
         });
     });
+
+    it('should allow getting "value" of the topLevelGroup', function() {
+        expect(controller.value()).toEqual({
+            operator: 'AND',
+            children: []
+        });
+    });
 });
