@@ -62,7 +62,9 @@ grunt test
 ```
 
 ##### Demo
-Open demo/index.html in browser
+
+ * Run `http-server` from the root of the project (which can be installed via npm)
+ * Open [http://localhost:8080/demo/](demo URL) in browser
 
 ### Release
 

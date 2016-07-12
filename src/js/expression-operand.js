@@ -4,7 +4,9 @@ angular.module('ngEquation')
     .factory('operandOptions', function() {
         var operandOptionsApi = {
             class: 'string',
-            label: 'string'
+            typeLabel: 'string',
+            editMetadata: 'function',
+            getLabel: 'function'
         };
 
         function MissingOperandOptionException(property) {
@@ -29,7 +31,7 @@ angular.module('ngEquation')
             }
         };
     })
-    .controller('ExpressionOperandCtrl', function(operandOptions) {
+    .controller('ExpressionOperandCtrl', function($q, operandOptions) {
         var ctrl = this;
 
         operandOptions.validate(ctrl.options);
@@ -39,6 +41,17 @@ angular.module('ngEquation')
                 ctrl.group.removeOperand(ctrl.options);
             }
         };
+
+        ctrl.editMetadata = function() {
+            var editResult = ctrl.options.editMetadata();
+            $q.when(editResult).then(function(result) {
+                ctrl.options.value = result;
+            });
+        };
+
+        if (ctrl.group) {
+            ctrl.editMetadata();
+        }
     })
     .directive('expressionOperand', function($templateCache) {
         return {
@@ -109,8 +122,7 @@ angular.module('ngEquation')
                                     var newOperandCtrl = angular.element(draggableElement).scope().operand;
 
                                     return dropped &&
-                                        (existingOperandCtrl.options.class !== newOperandCtrl.options.class ||
-                                         existingOperandCtrl.options.label !== newOperandCtrl.options.label);
+                                        (existingOperandCtrl.options.value !== newOperandCtrl.options.value);
                                 }
                             }
                             return false;

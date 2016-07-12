@@ -1,7 +1,12 @@
 <span style="display: inline-block">
     <span class="eq-operand" style="display: inline-block"
         ng-class="operand.options.class">
-        {{operand.options.label}}
+        <span ng-if="operand.options.value">
+            {{operand.options.getLabel(operand.options)}}
+        </span>
+        <span ng-if="!operand.options.value">
+            {{operand.options.typeLabel}}
+        </span>
 
         <button class="eq-remove-operand"
             ng-if="operand.group"

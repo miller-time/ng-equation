@@ -14,17 +14,19 @@ describe('expressionOperand directive', function() {
     beforeEach(inject(function($compile, _$exceptionHandler_, $rootScope, $timeout) {
         $exceptionHandler = _$exceptionHandler_;
 
-        instantiate = function(options) {
+        instantiate = function(options, group) {
             var controller;
 
             // use $timeout to allow for exception assertions
             $timeout(function() {
                 $scope = $rootScope.$new();
                 $scope.myOptions = options;
+                $scope.myGroup = group;
 
                 var element = angular.element(
                     '<expression-operand ' +
-                        'operand-options="myOptions">' +
+                        'operand-options="myOptions" ' +
+                        'group="myGroup">' +
                     '</expression-operand>'
                 );
                 $compile(element)($scope);
@@ -39,28 +41,78 @@ describe('expressionOperand directive', function() {
     }));
 
     describe('with required options missing', function() {
-        it('should raise a missing operand exception', function() {
-            instantiate({class: 'foo'});
+        it('should raise a missing option exception', function() {
+            var operandOptions = {
+                class: 'foo',
+                typeLabel: 'Foo',
+                getLabel: jasmine.createSpy('fooOperand.getLabel')
+            };
+            instantiate(operandOptions);
             expect($exceptionHandler.errors[0].error).toEqual(
-                'Operand options missing required property "label".'
+                'Operand options missing required property "editMetadata".'
             );
         });
     });
 
     describe('with required option of incorrect type', function() {
         it('should raise an operand type exception', function() {
-            instantiate({class: 2, label: 'Foo'});
+            var operandOptions = {
+                class: 'foo',
+                typeLabel: 'Foo',
+                getLabel: jasmine.createSpy('fooOperand.getLabel'),
+                editMetadata: 'edit?'
+            };
+            instantiate(operandOptions);
             expect($exceptionHandler.errors[0].error).toEqual(
-                'Operand options property "class" is incorrect type. Expected: "string". Got: "number".'
+                'Operand options property "editMetadata" is incorrect type. Expected: "function". Got: "string".'
             );
         });
     });
 
     describe('with valid options', function() {
-        it('should have class and label', function() {
-            var controller = instantiate({class: 'foo', label: 'Bar'});
-            expect(controller.options.class).toEqual('foo');
-            expect(controller.options.label).toEqual('Bar');
+        var controller,
+            operandOptions;
+
+        beforeEach(function() {
+            operandOptions = {
+                class: 'foo',
+                typeLabel: 'Foo',
+                getLabel: jasmine.createSpy('fooOperand.getLabel'),
+                editMetadata: jasmine.createSpy('fooOperand.editMetadata').and.callFake(function() {
+                    return 'newValue';
+                })
+            };
+            controller = instantiate(operandOptions);
+        });
+
+        it('should have a "getLabel" method for displaying its value', function() {
+            controller.options.getLabel();
+            expect(operandOptions.getLabel).toHaveBeenCalled();
+        });
+
+        it('should have an "editMetadata" method for setting its value', function() {
+            controller.editMetadata();
+            expect(operandOptions.editMetadata).toHaveBeenCalled();
+
+            // trigger `$q.when()` wrapped around result
+            $scope.$apply();
+            expect(controller.options.value).toEqual('newValue');
+        });
+    });
+
+    describe('in a group', function() {
+        it('should immediately call editMetadata', function() {
+            var operandOptions = {
+                class: 'foo',
+                typeLabel: 'Foo',
+                getLabel: function() {
+                    return 'foo';
+                },
+                editMetadata: jasmine.createSpy('fooOperand.editMetadata')
+            };
+            instantiate(operandOptions, {message: "I'm a group!"});
+
+            expect(operandOptions.editMetadata).toHaveBeenCalled();
         });
     });
 });
