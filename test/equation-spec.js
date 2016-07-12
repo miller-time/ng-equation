@@ -24,7 +24,8 @@ describe('equation directive', function() {
     it('should initiate a topLevelGroup', function() {
         expect(controller.topLevelGroup).toEqual({
             operator: 'AND',
-            operands: []
+            operands: [],
+            onReady: jasmine.any(Function)
         });
     });
 });

@@ -6,7 +6,10 @@ angular.module('ngEquation')
 
         ctrl.topLevelGroup = {
             operator: 'AND',
-            operands: []
+            operands: [],
+            onReady: function(groupApi) {
+                ctrl.groupApi = groupApi;
+            }
         };
     })
     .directive('equation', function($templateCache) {

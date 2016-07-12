@@ -13,6 +13,7 @@
         <expression-group
             operator="{{equation.topLevelGroup.operator}}"
             operands="equation.topLevelGroup.operands"
+            on-ready="equation.topLevelGroup.onReady(groupApi)"
             available-operands="equation.options.availableOperands">
         </expression-group>
     </span>

@@ -62,6 +62,13 @@ angular.module('ngEquation')
                 })
             };
         };
+
+        if (angular.isFunction(ctrl.onReady)) {
+            var groupApi = {
+                value: ctrl.value
+            };
+            ctrl.onReady({groupApi: groupApi});
+        }
     })
     .directive('expressionGroup', function($templateCache) {
         return {
@@ -72,7 +79,8 @@ angular.module('ngEquation')
                 subgroupId: '@',
                 operator: '@',
                 operands: '=',
-                availableOperands: '='
+                availableOperands: '=',
+                onReady: '&'
             },
             controller: 'ExpressionGroupCtrl',
             controllerAs: 'group',
