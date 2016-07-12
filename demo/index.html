@@ -30,8 +30,16 @@
         <h1>ng-equation demo</h1>
 
         <equation
-            equation-options="example.config">
+            equation-options="example.config"
+            on-ready="example.onEquationReady(equationApi)">
         </equation>
+
+        <hr>
+
+        <div class="form-group">
+            <label>JSON</label>
+        </div>
+        <pre>{{example.toJson()}}</pre>
     </div>
 </body>
 </html>
