@@ -132,7 +132,12 @@ module.exports = function(grunt) {
         },
 
         lesslint: {
-            src: ['less/**/*.less']
+            src: ['less/**/*.less'],
+            options: {
+                csslint: {
+                    csslintrc: '.csslintrc'
+                }
+            }
         },
 
         less: {
