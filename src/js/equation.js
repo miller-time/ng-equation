@@ -33,6 +33,7 @@ angular.module('ngEquation')
             scope: {},
             bindToController: {
                 options: '=equationOptions',
+                class: '@equationClass',
                 onReady: '&'
             },
             controller: 'EquationCtrl',
