@@ -1,26 +1,28 @@
 'use strict';
 
 describe('equation directive', function() {
-    var $compile,
-        $scope,
-        ctrl,
-        element;
-
-    var standardMarkup = '<equation equation-options="myOptions"></equation>';
+    var $scope,
+        controller;
 
     beforeEach(module('ngEquation'));
 
-    beforeEach(inject(function(_$compile_, $rootScope) {
-        $compile = _$compile_;
+    beforeEach(inject(function($compile, $rootScope) {
         $scope = $rootScope.$new();
         $scope.myOptions = {opt: 1};
-        element = $compile(standardMarkup)($scope);
+
+        var element = angular.element(
+            '<equation ' +
+                'equation-options="myOptions">' +
+            '</equation>'
+        );
+        $compile(element)($scope);
         $scope.$digest();
-        ctrl = element.isolateScope().equation;
+
+        controller = element.isolateScope().equation;
     }));
 
     it('should initiate a topLevelGroup', function() {
-        expect(ctrl.topLevelGroup).toEqual({
+        expect(controller.topLevelGroup).toEqual({
             operator: 'AND',
             operands: []
         });
