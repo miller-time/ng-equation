@@ -25,7 +25,6 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         scope: {},
         bindToController: {
             options: "=equationOptions",
-            "class": "@equationClass",
             onReady: "&"
         },
         controller: "EquationCtrl",
