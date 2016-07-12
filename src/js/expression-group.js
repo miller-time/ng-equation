@@ -34,6 +34,34 @@ angular.module('ngEquation')
                 ctrl.operands.splice(operandIndex, 1);
             }
         };
+
+        function getValue(operand) {
+            var value;
+            if (operand.operands) {
+                value = {
+                    operator: operand.operator,
+                    children: operand.operands.map(function(childOperand) {
+                        return getValue(childOperand);
+                    })
+                };
+            } else {
+                value = {
+                    itemType: operand.class,
+                    id: operand.value,
+                    label: operand.getLabel(operand)
+                };
+            }
+            return value;
+        }
+
+        ctrl.value = function() {
+            return {
+                operator: ctrl.operator,
+                children: ctrl.operands.map(function(operand) {
+                    return getValue(operand);
+                })
+            };
+        };
     })
     .directive('expressionGroup', function($templateCache) {
         return {
