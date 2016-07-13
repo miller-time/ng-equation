@@ -1,3 +1,12 @@
 .eq-operand.fruit, .eq-operand-menu-item.fruit {
     background-color: lightblue;
+    color: white;
+    border-color: transparent;
+}
+
+.fork-img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 0;
 }

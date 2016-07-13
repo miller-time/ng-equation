@@ -1,3 +1,5 @@
+@lime-green: #00ec00;
+
 .ng-equation.basic {
 
     .eq-operand {
@@ -6,21 +8,20 @@
         }
 
         &.drop-target {
-            box-shadow: 0 0 7px 3px #00ec00;
+            box-shadow: 0 0 7px 3px @lime-green;
         }
     }
 
     .eq-group {
         .eq-new-operand {
-
             &.drop-target {
-                background-color: #00ec00;
-                color: white;
+                background-color: @lime-green;
             }
         }
     }
 
     .eq-remove-group {
         background-color: red;
+        color: white;
     }
 }
