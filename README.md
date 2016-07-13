@@ -34,6 +34,39 @@ Inject `ngEquation` into your application
 angular.module('myApp', ['ngEquation']);
 ```
 
+Set up the equation options of the directive in a controller.
+
+```javascript
+myController.myEquationOptions = {
+    availableOperands: [
+        class: 'fruit',
+        typeLabel: 'Fruit',
+        editMetadata: function() {
+            // called to configure the operand
+            return launchEditModal();
+        },
+        getLabel: function(operand) {
+            return operand.value ? capitalize(operand.value) : 'N/A';
+        }
+    ]
+};
+
+// Add an on ready function to access the equation api
+myController.myOnEquationReady = function(equationApi) {
+    ctrl.equationApi = equationApi;
+};
+```
+
+Add equation directive to your html template.  equation-class="basic" adds styling from less/ng-equation-basic.less
+
+```html
+<equation
+    equation-options="myController.myEquationOptions"
+    equation-class="basic"
+    on-ready="myController.myOnEquationReady(equationApi)">
+</equation>
+```
+
 ### Development
 
 ##### First time setup
