@@ -129,6 +129,45 @@ module.exports = function(grunt) {
                     message: 'Built demo from commit %sourceCommit% on branch %sourceBranch%'
                 }
             }
+        },
+
+        lesslint: {
+            src: ['src/less/**/*.less'],
+            options: {
+                csslint: {
+                    csslintrc: '.csslintrc'
+                }
+            }
+        },
+
+        less: {
+            dist: {
+                files: {
+                    'dist/ng-equation.css': 'src/less/**/*.less'
+                },
+                options: {
+                    compress: true
+                }
+            }
+        },
+
+        watch: {
+            js: {
+                files: ['src/**/*.js'],
+                tasks: ['ngAnnotate', 'uglify', 'clean', 'copy:demo', 'karma:continuous', 'eslint']
+            },
+            less: {
+                files: ['src/less/**/*.less'],
+                tasks: ['less', 'copy:demo', 'lesslint']
+            },
+            templates: {
+                files: ['src/templates/**/*.html'],
+                tasks: ['html2js', 'copy:demo']
+            },
+            test: {
+                files: ['test/**/*.js'],
+                tasks: ['karma:continuous']
+            }
         }
 
     });
@@ -137,13 +176,15 @@ module.exports = function(grunt) {
         'ngAnnotate',
         'uglify',
         'html2js',
+        'less',
         'clean',
         'copy:demo'
     ]);
 
     grunt.registerTask('test', [
         'karma:continuous',
-        'eslint'
+        'eslint',
+        'lesslint'
     ]);
 
     grunt.registerTask('deployDemo', [
@@ -152,6 +193,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('default', [
-        'build'
+        'build',
+        'watch'
     ]);
 };

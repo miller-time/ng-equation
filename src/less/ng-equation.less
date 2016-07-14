@@ -1,0 +1,81 @@
+.ng-equation {
+    label {
+        font-weight: 600;
+        display: inline-block;
+        width: 100%;
+    }
+
+    .eq-operand {
+        position: relative;
+        border: 1px solid darkgray;
+        border-radius: 5px;
+        padding: 10px;
+        cursor: pointer;
+
+        -webkit-transform: translate(0, 0);
+        -moz-transform: translate(0, 0);
+        -ms-transform: translate(0, 0);
+        -o-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+
+    .eq-remove-operand {
+        border: 1px solid transparent;
+        border-radius: 14px;
+        padding: 2px 8px;
+        background-color: darkgray;
+    }
+
+    .eq-operator {
+        border: 1px solid transparent;
+        border-radius: 5px;
+        padding: 4px;
+    }
+
+    .eq-group {
+        position: relative;
+        display: inline-block;
+        background-color: white;
+        border: 1px solid darkgray;
+        border-radius: 5px;
+        padding: 15px;
+
+        .eq-new-operand {
+            border: 1px solid transparent;
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
+    }
+
+    .eq-remove-group {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 9px;
+        padding: 0;
+        border: 1px solid transparent;
+        border-radius: 3px;
+    }
+
+    .eq-toolbox-container {
+        display: block;
+        width: 100%;
+        padding-top: 25px;
+    }
+
+    .eq-toolbox {
+        display: inline-block;
+        border: 1px solid darkgray;
+        border-radius: 5px;
+        padding: 15px;
+        margin: 10px;
+
+        .eq-operand {
+            z-index: 2;
+        }
+    }
+
+    .top-level-group {
+        margin-left: 10px;
+    }
+}
