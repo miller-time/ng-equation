@@ -132,7 +132,7 @@ module.exports = function(grunt) {
         },
 
         lesslint: {
-            src: ['less/**/*.less'],
+            src: ['src/less/**/*.less'],
             options: {
                 csslint: {
                     csslintrc: '.csslintrc'
@@ -143,7 +143,7 @@ module.exports = function(grunt) {
         less: {
             dist: {
                 files: {
-                    'dist/ng-equation.css': 'less/**/*.less'
+                    'dist/ng-equation.css': 'src/less/**/*.less'
                 },
                 options: {
                     compress: true
@@ -157,7 +157,7 @@ module.exports = function(grunt) {
                 tasks: ['ngAnnotate', 'uglify', 'clean', 'copy:demo', 'karma:continuous', 'eslint']
             },
             less: {
-                files: ['less/**/*.less'],
+                files: ['src/less/**/*.less'],
                 tasks: ['less', 'copy:demo', 'lesslint']
             },
             templates: {
