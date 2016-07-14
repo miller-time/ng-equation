@@ -14,7 +14,9 @@ Install via bower or download source from this repo
 bower install ng-equation
 ```
 
-Add the following to your html (angular and interact are required dependencies)
+Add the following to your html
+
+*Note*: jquery, bootstrap, angular, angular-bootstrap, and interact are required dependencies
 
 ```html
 <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
