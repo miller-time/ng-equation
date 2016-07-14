@@ -39,14 +39,16 @@ Set up the equation options of the directive in a controller.
 ```javascript
 myController.myEquationOptions = {
     availableOperands: [
-        class: 'fruit',
-        typeLabel: 'Fruit',
-        editMetadata: function() {
-            // called to configure the operand
-            return launchEditModal();
-        },
-        getLabel: function(operand) {
-            return operand.value ? capitalize(operand.value) : 'N/A';
+        {
+            class: 'fruit',
+            typeLabel: 'Fruit',
+            editMetadata: function() {
+                // called to configure the operand
+                return launchEditModal();
+            },
+            getLabel: function(operand) {
+                return operand.value ? capitalize(operand.value) : 'N/A';
+            }
         }
     ]
 };
