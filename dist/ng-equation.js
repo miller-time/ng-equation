@@ -25,6 +25,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         scope: {},
         bindToController: {
             options: "=equationOptions",
+            "class": "@equationClass",
             onReady: "&"
         },
         controller: "EquationCtrl",
@@ -76,7 +77,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
             groupApi: groupApi
         });
     }
-}).directive("expressionGroup", [ "$templateCache", function($templateCache) {
+}).directive("expressionGroup", [ "$compile", "$templateCache", "expressionGroupDragNDrop", function($compile, $templateCache, expressionGroupDragNDrop) {
     return {
         restrict: "EA",
         scope: {},
@@ -90,67 +91,15 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         },
         controller: "ExpressionGroupCtrl",
         controllerAs: "group",
-        link: function(scope, element) {
-            interact(element.find(".eq-new-operand")[0]).dropzone({
-                accept: ".eq-operand",
-                checker: function(dragEvent, event, dropped, dropZone, dropElement, draggable, draggableElement) {
-                    var operandCtrl = angular.element(draggableElement).scope().operand, groupScope = angular.element(dropElement).scope();
-                    if (groupScope) {
-                        var groupCtrl = angular.element(dropElement).scope().group;
-                        return dropped && groupCtrl.getIndexOfOperand(operandCtrl.options) === -1;
-                    }
-                    return !1;
-                },
-                ondropactivate: function(event) {
-                    event.target.classList.add("drop-active");
-                },
-                ondragenter: function(event) {
-                    event.target.classList.add("drop-target"), event.relatedTarget.classList.add("can-drop");
-                    var dropRect = interact.getElementRect(event.target), dropCenter = {
-                        x: dropRect.left + dropRect.width / 2,
-                        y: dropRect.top + dropRect.height / 2
-                    };
-                    event.draggable.draggable({
-                        snap: {
-                            targets: [ dropCenter ]
-                        }
-                    });
-                },
-                ondragleave: function(event) {
-                    event.target.classList.remove("drop-target"), event.relatedTarget.classList.remove("can-drop"), 
-                    event.draggable.draggable({
-                        snap: {
-                            targets: [ {
-                                x: parseFloat(event.relatedTarget.getAttribute("data-start-x")),
-                                y: parseFloat(event.relatedTarget.getAttribute("data-start-y"))
-                            } ]
-                        }
-                    });
-                },
-                ondrop: function(event) {
-                    event.relatedTarget.classList.remove("can-drop");
-                    var operandCtrl = angular.element(event.relatedTarget).scope().operand, groupCtrl = angular.element(event.target).scope().group;
-                    if (scope.$apply(function() {
-                        groupCtrl.addOperand(operandCtrl.options);
-                    }), operandCtrl.group) scope.$apply(function() {
-                        operandCtrl.removeFromGroup();
-                    }); else {
-                        var operandElement = event.relatedTarget;
-                        event.draggable.draggable({
-                            snap: {
-                                targets: [ {
-                                    x: parseFloat(operandElement.getAttribute("data-start-x")),
-                                    y: parseFloat(operandElement.getAttribute("data-start-y"))
-                                } ]
-                            }
-                        }), operandElement.style.webkitTransform = operandElement.style.transform = "none", 
-                        operandElement.setAttribute("data-x", 0), operandElement.setAttribute("data-y", 0);
-                    }
-                },
-                ondropdeactivate: function(event) {
-                    event.target.classList.remove("drop-active"), event.target.classList.remove("drop-target");
+        compile: function(cElement) {
+            var compiledContents, contents = cElement.contents().remove();
+            return {
+                post: function(scope, element) {
+                    compiledContents || (compiledContents = $compile(contents)), compiledContents(scope, function(clone) {
+                        element.append(clone);
+                    }), expressionGroupDragNDrop.setup(scope, element);
                 }
-            });
+            };
         },
         template: $templateCache.get("expression-group.html")
     };
@@ -196,7 +145,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
             ctrl.options.value = result;
         });
     }, ctrl.group && ctrl.editMetadata();
-} ]).directive("expressionOperand", [ "$templateCache", function($templateCache) {
+} ]).directive("expressionOperand", [ "$templateCache", "expressionOperandDragNDrop", function($templateCache, expressionOperandDragNDrop) {
     return {
         restrict: "EA",
         scope: {},
@@ -207,8 +156,80 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         controller: "ExpressionOperandCtrl",
         controllerAs: "operand",
         link: function(scope, element) {
+            expressionOperandDragNDrop.setup(scope, element);
+        },
+        template: $templateCache.get("expression-operand.html")
+    };
+} ]), angular.module("ngEquation").factory("expressionGroupDragNDrop", [ "$window", function($window) {
+    return {
+        setup: function(scope, element) {
+            $window.interact(element.find(".eq-new-operand")[0]).dropzone({
+                accept: ".eq-operand",
+                checker: function(dragEvent, event, dropped, dropZone, dropElement, draggable, draggableElement) {
+                    var operandCtrl = angular.element(draggableElement).scope().operand, groupScope = angular.element(dropElement).scope();
+                    if (groupScope) {
+                        var groupCtrl = angular.element(dropElement).scope().group;
+                        return dropped && groupCtrl.getIndexOfOperand(operandCtrl.options) === -1;
+                    }
+                    return !1;
+                },
+                ondropactivate: function(event) {
+                    event.target.classList.add("drop-active");
+                },
+                ondragenter: function(event) {
+                    event.target.classList.add("drop-target"), event.relatedTarget.classList.add("can-drop");
+                    var dropRect = $window.interact.getElementRect(event.target), dropCenter = {
+                        x: dropRect.left + dropRect.width / 2,
+                        y: dropRect.top + dropRect.height / 2
+                    };
+                    event.draggable.draggable({
+                        snap: {
+                            targets: [ dropCenter ]
+                        }
+                    });
+                },
+                ondragleave: function(event) {
+                    event.target.classList.remove("drop-target"), event.relatedTarget.classList.remove("can-drop"), 
+                    event.draggable.draggable({
+                        snap: {
+                            targets: [ {
+                                x: parseFloat(event.relatedTarget.getAttribute("data-start-x")),
+                                y: parseFloat(event.relatedTarget.getAttribute("data-start-y"))
+                            } ]
+                        }
+                    });
+                },
+                ondrop: function(event) {
+                    event.relatedTarget.classList.remove("can-drop");
+                    var operandCtrl = angular.element(event.relatedTarget).scope().operand, groupCtrl = angular.element(event.target).scope().group;
+                    if (scope.$apply(function() {
+                        groupCtrl.addOperand(operandCtrl.options);
+                    }), operandCtrl.group) scope.$apply(function() {
+                        operandCtrl.removeFromGroup();
+                    }); else {
+                        var operandElement = event.relatedTarget;
+                        event.draggable.draggable({
+                            snap: {
+                                targets: [ {
+                                    x: parseFloat(operandElement.getAttribute("data-start-x")),
+                                    y: parseFloat(operandElement.getAttribute("data-start-y"))
+                                } ]
+                            }
+                        }), operandElement.style.webkitTransform = operandElement.style.transform = "none", 
+                        operandElement.setAttribute("data-x", 0), operandElement.setAttribute("data-y", 0);
+                    }
+                },
+                ondropdeactivate: function(event) {
+                    event.target.classList.remove("drop-active"), event.target.classList.remove("drop-target");
+                }
+            });
+        }
+    };
+} ]), angular.module("ngEquation").factory("expressionOperandDragNDrop", [ "$window", function($window) {
+    return {
+        setup: function(scope, element) {
             var operandElement = element.find(".eq-operand")[0];
-            interact(operandElement).draggable({
+            $window.interact(operandElement).draggable({
                 autoScroll: !0,
                 snap: {
                     range: 1 / 0,
@@ -221,7 +242,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
                 onstart: function(event) {
                     var startX = parseFloat(event.target.getAttribute("data-start-x")), startY = parseFloat(event.target.getAttribute("data-start-y"));
                     if (isNaN(startX) || isNaN(startY)) {
-                        var rect = interact.getElementRect(event.target);
+                        var rect = $window.interact.getElementRect(event.target);
                         startX = rect.left + rect.width / 2, startY = rect.top + rect.height / 2, event.target.setAttribute("data-start-x", startX), 
                         event.target.setAttribute("data-start-y", startY), event.interactable.draggable({
                             snap: {
@@ -256,7 +277,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
                 },
                 ondragenter: function(event) {
                     event.target.classList.add("drop-target"), event.relatedTarget.classList.add("can-drop");
-                    var dropRect = interact.getElementRect(event.target), dropCenter = {
+                    var dropRect = $window.interact.getElementRect(event.target), dropCenter = {
                         x: dropRect.left + dropRect.width / 2,
                         y: dropRect.top + dropRect.height / 2
                     };
@@ -306,7 +327,6 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
                     event.target.classList.remove("drop-active"), event.target.classList.remove("drop-target");
                 }
             });
-        },
-        template: $templateCache.get("expression-operand.html")
+        }
     };
 } ]);

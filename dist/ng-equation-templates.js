@@ -2,7 +2,7 @@ angular.module('ngEquation.templates', ['equation.html', 'expression-group.html'
 
 angular.module("equation.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("equation.html",
-    "<span class=\"eq-equation\">\n" +
+    "<span class=\"ng-equation\" ng-class=\"equation.class\">\n" +
     "\n" +
     "    <span class=\"eq-toolbox-container\">\n" +
     "        <label class=\"eq-toolbox-label\">\n" +
