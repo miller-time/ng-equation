@@ -70,7 +70,7 @@ angular.module('ngEquation')
             ctrl.onReady({groupApi: groupApi});
         }
     })
-    .directive('expressionGroup', function($templateCache, expressionGroupDragNDrop) {
+    .directive('expressionGroup', function($compile, $templateCache, expressionGroupDragNDrop) {
         return {
             restrict: 'EA',
             scope: {},
@@ -84,8 +84,24 @@ angular.module('ngEquation')
             },
             controller: 'ExpressionGroupCtrl',
             controllerAs: 'group',
-            link: function(scope, element) {
-                expressionGroupDragNDrop.setup(scope, element);
+            compile: function(cElement) {
+                // break recursion loop by removing contents
+                var contents = cElement.contents().remove();
+                var compiledContents;
+                return {
+                    post: function(scope, element) {
+                        // compile contents
+                        if (!compiledContents) {
+                            compiledContents = $compile(contents);
+                        }
+                        // re-add contents to element
+                        compiledContents(scope, function(clone) {
+                            element.append(clone);
+                        });
+
+                        expressionGroupDragNDrop.setup(scope, element);
+                    }
+                };
             },
             template: $templateCache.get('expression-group.html')
         };
