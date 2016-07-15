@@ -43,15 +43,18 @@ angular.module('ngEquation')
         };
 
         ctrl.editMetadata = function() {
+            var valueInitialized = angular.isDefined(ctrl.options.value);
             var editResult = ctrl.options.editMetadata();
             $q.when(editResult).then(function(result) {
-                if (angular.isUndefined(result)) {
-                    ctrl.removeFromGroup();
-                } else {
+                if (angular.isDefined(result)) {
                     ctrl.options.value = result;
+                } else if (!valueInitialized) {
+                    ctrl.removeFromGroup();
                 }
             }, function() {
-                ctrl.removeFromGroup();
+                if (!valueInitialized) {
+                    ctrl.removeFromGroup();
+                }
             });
         };
 
