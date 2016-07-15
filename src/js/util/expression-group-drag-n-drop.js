@@ -7,6 +7,7 @@ angular.module('ngEquation')
                 $window.interact(element.find('.eq-new-operand')[0])
                     .dropzone({
                         accept: '.eq-operand',
+                        overlap: 0.10,
                         checker: function(dragEvent, event, dropped, dropZone, dropElement, draggable, draggableElement) {
                             var operandCtrl = angular.element(draggableElement).scope().operand;
 
