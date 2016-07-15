@@ -119,6 +119,10 @@ describe('expressionGroup directive', function() {
             });
         });
 
+        it('should get -1 for index of operands that are subgroups', function() {
+            expect(controller.getIndexOfOperand(controller.operands[0])).toBe(-1);
+        });
+
         describe('that has an operand', function() {
             beforeEach(function() {
                 controller.operands[0].operands.push(fooOperand);

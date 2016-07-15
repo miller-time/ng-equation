@@ -20,9 +20,11 @@ angular.module('ngEquation')
         };
 
         ctrl.getIndexOfOperand = function(operand) {
-            for (var i = 0, len = ctrl.operands.length; i < len; i++) {
-                if (ctrl.operands[i].value === operand.value) {
-                    return i;
+            if (!ctrl.isSubgroup(operand)) {
+                for (var i = 0, len = ctrl.operands.length; i < len; i++) {
+                    if (!ctrl.isSubgroup(ctrl.operands[i]) && ctrl.operands[i].value === operand.value) {
+                        return i;
+                    }
                 }
             }
             return -1;
