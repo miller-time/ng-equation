@@ -45,7 +45,13 @@ angular.module('ngEquation')
         ctrl.editMetadata = function() {
             var editResult = ctrl.options.editMetadata();
             $q.when(editResult).then(function(result) {
-                ctrl.options.value = result;
+                if (angular.isUndefined(result)) {
+                    ctrl.removeFromGroup();
+                } else {
+                    ctrl.options.value = result;
+                }
+            }, function() {
+                ctrl.removeFromGroup();
             });
         };
 
