@@ -114,5 +114,20 @@ describe('expressionOperand directive', function() {
 
             expect(operandOptions.editMetadata).toHaveBeenCalled();
         });
+
+        it('should not immediately call editMetadata when value already exists', function() {
+            var operandOptions = {
+                class: 'foo',
+                typeLabel: 'Foo',
+                getLabel: function() {
+                    return 'foo';
+                },
+                editMetadata: jasmine.createSpy('fooOperand.editMetadata'),
+                value: 100
+            };
+            instantiate(operandOptions, {message: "I'm a group!"});
+
+            expect(operandOptions.editMetadata).not.toHaveBeenCalled();
+        });
     });
 });

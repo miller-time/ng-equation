@@ -49,7 +49,7 @@ angular.module('ngEquation')
             });
         };
 
-        if (ctrl.group) {
+        if (ctrl.group && angular.isUndefined(ctrl.options.value)) {
             ctrl.editMetadata();
         }
     })
