@@ -15,6 +15,10 @@ angular.module('ngEquation')
             });
         };
 
+        ctrl.isSubgroup = function(operand) {
+            return !!operand.operands;
+        };
+
         ctrl.getIndexOfOperand = function(operand) {
             for (var i = 0; i < ctrl.operands.length; ++i) {
                 if (ctrl.operands[i].value === operand.value) {
@@ -37,7 +41,7 @@ angular.module('ngEquation')
 
         function getValue(operand) {
             var value;
-            if (operand.operands) {
+            if (ctrl.isSubgroup(operand)) {
                 value = {
                     operator: operand.operator,
                     children: operand.operands.map(function(childOperand) {
