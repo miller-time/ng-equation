@@ -22,21 +22,26 @@ describe('equation directive', function() {
 
             controller = element.isolateScope().equation;
         };
-        instantiate();
     }));
 
-    it('should initiate a topLevelGroup', function() {
-        expect(controller.topLevelGroup).toEqual({
-            operator: 'AND',
-            operands: [],
-            onReady: jasmine.any(Function)
+    describe('with standard options', function() {
+        beforeEach(function() {
+            instantiate();
         });
-    });
 
-    it('should allow getting "value" of the topLevelGroup', function() {
-        expect(controller.value()).toEqual({
-            operator: 'AND',
-            children: []
+        it('should initiate a topLevelGroup', function() {
+            expect(controller.topLevelGroup).toEqual({
+                operator: 'AND',
+                operands: [],
+                onReady: jasmine.any(Function)
+            });
+        });
+
+        it('should allow getting "value" of the topLevelGroup', function() {
+            expect(controller.value()).toEqual({
+                operator: 'AND',
+                children: []
+            });
         });
     });
 });
