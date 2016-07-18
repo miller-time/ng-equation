@@ -36,7 +36,7 @@ angular.module('ngEquation')
 
         operandOptions.validate(ctrl.options);
 
-        var valueInitialized = angular.isDefined(ctrl.options.value);
+        var isValueInitialized = angular.isDefined(ctrl.options.value);
 
         ctrl.removeFromGroup = function() {
             if (ctrl.group) {
@@ -49,12 +49,12 @@ angular.module('ngEquation')
             $q.when(editResult).then(function(result) {
                 if (angular.isDefined(result)) {
                     ctrl.options.value = result;
-                    valueInitialized = true;
-                } else if (!valueInitialized) {
+                    isValueInitialized = true;
+                } else if (!isValueInitialized) {
                     ctrl.removeFromGroup();
                 }
             }, function() {
-                if (!valueInitialized) {
+                if (!isValueInitialized) {
                     ctrl.removeFromGroup();
                 }
             });
