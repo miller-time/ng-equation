@@ -39,6 +39,7 @@ describe('expressionGroup directive', function() {
         controller.addOperand(fooOperand);
 
         expect(controller.operands.length).toBe(1);
+        expect(controller.isSubgroup(controller.operands[0])).toBe(false);
     });
 
     it('should allow adding subgroups as operands', function() {
@@ -47,6 +48,7 @@ describe('expressionGroup directive', function() {
         controller.addSubgroup();
 
         expect(controller.operands.length).toBe(1);
+        expect(controller.isSubgroup(controller.operands[0])).toBe(true);
     });
 
     it('should allow getting the "value"', function() {
@@ -115,6 +117,10 @@ describe('expressionGroup directive', function() {
                     }
                 ]
             });
+        });
+
+        it('should get -1 for index of operands that are subgroups', function() {
+            expect(controller.getIndexOfOperand(controller.operands[0])).toBe(-1);
         });
 
         describe('that has an operand', function() {

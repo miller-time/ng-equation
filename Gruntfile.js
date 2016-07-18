@@ -166,7 +166,7 @@ module.exports = function(grunt) {
             },
             test: {
                 files: ['test/**/*.js'],
-                tasks: ['karma:continuous']
+                tasks: ['karma:continuous', 'eslint']
             }
         }
 

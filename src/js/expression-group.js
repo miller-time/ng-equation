@@ -15,10 +15,16 @@ angular.module('ngEquation')
             });
         };
 
+        ctrl.isSubgroup = function(operand) {
+            return !!operand.operands;
+        };
+
         ctrl.getIndexOfOperand = function(operand) {
-            for (var i = 0; i < ctrl.operands.length; ++i) {
-                if (ctrl.operands[i].value === operand.value) {
-                    return i;
+            if (!ctrl.isSubgroup(operand)) {
+                for (var i = 0, len = ctrl.operands.length; i < len; i++) {
+                    if (!ctrl.isSubgroup(ctrl.operands[i]) && ctrl.operands[i].value === operand.value) {
+                        return i;
+                    }
                 }
             }
             return -1;
@@ -37,7 +43,7 @@ angular.module('ngEquation')
 
         function getValue(operand) {
             var value;
-            if (operand.operands) {
+            if (ctrl.isSubgroup(operand)) {
                 value = {
                     operator: operand.operator,
                     children: operand.operands.map(function(childOperand) {

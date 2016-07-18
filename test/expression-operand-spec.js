@@ -3,6 +3,7 @@
 describe('expressionOperand directive', function() {
     var $exceptionHandler,
         $scope,
+        $q,
         instantiate;
 
     beforeEach(module('ngEquation'));
@@ -11,8 +12,9 @@ describe('expressionOperand directive', function() {
         $exceptionHandlerProvider.mode('log');
     }));
 
-    beforeEach(inject(function($compile, _$exceptionHandler_, $rootScope, $timeout) {
+    beforeEach(inject(function($compile, _$exceptionHandler_, $rootScope, $timeout, _$q_) {
         $exceptionHandler = _$exceptionHandler_;
+        $q = _$q_;
 
         instantiate = function(options, group) {
             var controller;
@@ -98,6 +100,58 @@ describe('expressionOperand directive', function() {
             $scope.$apply();
             expect(controller.options.value).toEqual('newValue');
         });
+
+        it('should call "removeFromGroup" method when no initial value and operand\'s "editMetadata" does not return a value', function() {
+            controller.options.editMetadata = function() { return undefined; };
+            controller.removeFromGroup = jasmine.createSpy('removeFromGroupSpy');
+            controller.editMetadata();
+            $scope.$apply();
+            expect(controller.removeFromGroup).toHaveBeenCalled();
+        });
+
+        it('should call "removeFromGroup" method when no initial value and operand\'s "editMetadata" is a rejected promise', function() {
+            var deferred = $q.defer();
+            controller.options.editMetadata = function() { return deferred.promise; };
+            controller.removeFromGroup = jasmine.createSpy('removeFromGroupSpy');
+            controller.editMetadata();
+            deferred.reject();
+            $scope.$apply();
+            expect(controller.removeFromGroup).toHaveBeenCalled();
+        });
+    });
+
+    describe('initialized with a value', function() {
+        var controller,
+            operandOptions;
+
+        beforeEach(function() {
+            operandOptions = {
+                class: 'foo',
+                typeLabel: 'Foo',
+                getLabel: jasmine.createSpy('fooOperand.getLabel'),
+                editMetadata: jasmine.createSpy('fooOperand.editMetadata'),
+                value: 'bar'
+            };
+            controller = instantiate(operandOptions);
+        });
+
+        it('should not call "removeFromGroup" when operand\'s "editMetadata" does not return a value', function() {
+            controller.options.editMetadata = function() { return undefined; };
+            controller.removeFromGroup = jasmine.createSpy('removeFromGroupSpy');
+            controller.editMetadata();
+            $scope.$apply();
+            expect(controller.removeFromGroup).not.toHaveBeenCalled();
+        });
+
+        it('should not call "removeFromGroup" when operand\'s "editMetadata" is a rejected promise', function() {
+            var deferred = $q.defer();
+            controller.options.editMetadata = function() { return deferred.promise; };
+            controller.removeFromGroup = jasmine.createSpy('removeFromGroupSpy');
+            controller.editMetadata();
+            deferred.reject();
+            $scope.$apply();
+            expect(controller.removeFromGroup).not.toHaveBeenCalled();
+        });
     });
 
     describe('in a group', function() {
@@ -113,6 +167,21 @@ describe('expressionOperand directive', function() {
             instantiate(operandOptions, {message: "I'm a group!"});
 
             expect(operandOptions.editMetadata).toHaveBeenCalled();
+        });
+
+        it('should not immediately call editMetadata when value already exists', function() {
+            var operandOptions = {
+                class: 'foo',
+                typeLabel: 'Foo',
+                getLabel: function() {
+                    return 'foo';
+                },
+                editMetadata: jasmine.createSpy('fooOperand.editMetadata'),
+                value: 100
+            };
+            instantiate(operandOptions, {message: "I'm a group!"});
+
+            expect(operandOptions.editMetadata).not.toHaveBeenCalled();
         });
     });
 });
