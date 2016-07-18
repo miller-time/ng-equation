@@ -31,7 +31,7 @@ angular.module('ngEquation')
             }
         };
     })
-    .controller('ExpressionOperandCtrl', function($q, operandOptions) {
+    .controller('ExpressionOperandCtrl', function($q, $log, operandOptions) {
         var ctrl = this;
 
         operandOptions.validate(ctrl.options);
@@ -52,6 +52,8 @@ angular.module('ngEquation')
                     isValueInitialized = true;
                 } else if (!isValueInitialized) {
                     ctrl.removeFromGroup();
+                } else if (angular.isDefined(ctrl.options.value)) {
+                    $log.warn('editMetadata resulted in undefined value, operand will retain previous value of ' + ctrl.options.value);
                 }
             }, function() {
                 if (!isValueInitialized) {
