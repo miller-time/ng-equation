@@ -1,9 +1,11 @@
 <span class="ng-equation" ng-class="equation.class">
 
     <span class="eq-toolbox-container">
-        <label class="eq-toolbox-label">
-            Toolbox
-        </label>
+        <span ng-transclude="toolboxLabel">
+            <label class="eq-toolbox-label">
+                Toolbox
+            </label>
+        </span>
         <expression-operand-toolbox
             operands="equation.options.availableOperands">
         </expression-operand-toolbox>
