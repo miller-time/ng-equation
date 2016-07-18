@@ -11,9 +11,13 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
     }, ctrl.value = function() {
         var value;
         return ctrl.groupApi && (value = ctrl.groupApi.value()), value;
+    }, ctrl.formula = function() {
+        var formula;
+        return ctrl.groupApi && (formula = ctrl.groupApi.formula()), formula;
     }, angular.isFunction(ctrl.onReady)) {
         var equationApi = {
-            value: ctrl.value
+            value: ctrl.value,
+            formula: ctrl.formula
         };
         ctrl.onReady({
             equationApi: equationApi
@@ -49,6 +53,14 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
             label: operand.getLabel(operand)
         };
     }
+    function getFormula(operands, operator) {
+        var operandFormulas = [];
+        angular.forEach(operands, function(operand) {
+            ctrl.isSubgroup(operand) ? operandFormulas.push([ "(", getFormula(operand.operands, operand.operator), ")" ].join("")) : operandFormulas.push(operand.getLabel(operand));
+        });
+        var prefix = "";
+        return "AND NOT" === operator && (prefix = "NOT "), prefix + operandFormulas.join(" " + operator + " ");
+    }
     var ctrl = this;
     if (ctrl.addOperand = function(operand) {
         ctrl.operands.push(angular.copy(operand));
@@ -74,9 +86,12 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
                 return getValue(operand);
             })
         };
+    }, ctrl.formula = function() {
+        return getFormula(ctrl.operands, ctrl.operator);
     }, angular.isFunction(ctrl.onReady)) {
         var groupApi = {
-            value: ctrl.value
+            value: ctrl.value,
+            formula: ctrl.formula
         };
         ctrl.onReady({
             groupApi: groupApi
@@ -140,7 +155,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
             });
         }
     };
-}).controller("ExpressionOperandCtrl", [ "$q", "operandOptions", function($q, operandOptions) {
+}).controller("ExpressionOperandCtrl", [ "$q", "$log", "operandOptions", function($q, $log, operandOptions) {
     var ctrl = this;
     operandOptions.validate(ctrl.options);
     var isValueInitialized = angular.isDefined(ctrl.options.value);
@@ -149,7 +164,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
     }, ctrl.editMetadata = function() {
         var editResult = ctrl.options.editMetadata();
         $q.when(editResult).then(function(result) {
-            angular.isDefined(result) ? (ctrl.options.value = result, isValueInitialized = !0) : isValueInitialized || ctrl.removeFromGroup();
+            angular.isDefined(result) ? (ctrl.options.value = result, isValueInitialized = !0) : isValueInitialized ? $log.warn("editMetadata resulted in undefined value, operand will retain previous value of " + ctrl.options.value) : ctrl.removeFromGroup();
         }, function() {
             isValueInitialized || ctrl.removeFromGroup();
         });
