@@ -2,7 +2,8 @@
 
 describe('equation directive', function() {
     var $scope,
-        controller;
+        controller,
+        instantiate;
 
     beforeEach(module('ngEquation'));
 
@@ -10,15 +11,18 @@ describe('equation directive', function() {
         $scope = $rootScope.$new();
         $scope.myOptions = {opt: 1};
 
-        var element = angular.element(
-            '<equation ' +
-                'equation-options="myOptions">' +
-            '</equation>'
-        );
-        $compile(element)($scope);
-        $scope.$digest();
+        instantiate = function() {
+            var element = angular.element(
+                '<equation ' +
+                    'equation-options="myOptions">' +
+                '</equation>'
+            );
+            $compile(element)($scope);
+            $scope.$digest();
 
-        controller = element.isolateScope().equation;
+            controller = element.isolateScope().equation;
+        };
+        instantiate();
     }));
 
     it('should initiate a topLevelGroup', function() {
