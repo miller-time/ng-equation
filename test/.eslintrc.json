@@ -8,5 +8,6 @@
     "inject": false
   },
   "rules": {
+    "jasmine/no-spec-dupes":[1, "branch"] // allow same test name as long as different branch
   }
 }

@@ -4,13 +4,15 @@ describe('expressionGroup directive', function() {
     var $scope,
         controller;
 
-    var fooOperand = {
-        class: 'foo',
-        typeLabel: 'Foo',
-        editMetadata: function() {},
-        getLabel: function() { return 'Bar'; },
-        value: 'bar'
-    };
+    function createOperand(value, label) {
+        return {
+            class: 'foo',
+            typeLabel: 'Foo',
+            editMetadata: function() {},
+            getLabel: function() { return label; },
+            value: value
+        };
+    }
 
     beforeEach(module('ngEquation'));
 
@@ -36,7 +38,7 @@ describe('expressionGroup directive', function() {
     it('should allow adding operands', function() {
         expect(controller.operands.length).toBe(0);
 
-        controller.addOperand(fooOperand);
+        controller.addOperand(createOperand('bar', 'Bar'));
 
         expect(controller.operands.length).toBe(1);
         expect(controller.isSubgroup(controller.operands[0])).toBe(false);
@@ -58,9 +60,13 @@ describe('expressionGroup directive', function() {
         });
     });
 
+    it('should allow getting the "formula"', function() {
+        expect(controller.formula()).toEqual('');
+    });
+
     describe('with an operand', function() {
         beforeEach(function() {
-            controller.addOperand(fooOperand);
+            controller.addOperand(createOperand('bar', 'Bar'));
         });
 
         it('should allow looking up the index of an operand', function() {
@@ -92,6 +98,46 @@ describe('expressionGroup directive', function() {
                 ]
             });
         });
+
+        it('should allow getting the "formula" of operand', function() {
+            expect(controller.formula()).toEqual('Bar');
+        });
+
+        it('should prepend "NOT" to the formula when operator is "AND NOT"', function() {
+            controller.operator = 'AND NOT';
+            expect(controller.formula()).toEqual('NOT Bar');
+        });
+
+        describe('with multiple operands', function() {
+            beforeEach(function() {
+                controller.addOperand(createOperand('foo', 'Foo'));
+            });
+
+            it('should allow getting the "formula" of operand', function() {
+                expect(controller.formula()).toEqual('Bar AND Foo');
+            });
+
+            it('should prepend "NOT" to the formula when operator is "AND NOT"', function() {
+                controller.operator = 'AND NOT';
+                expect(controller.formula()).toEqual('NOT Bar AND NOT Foo');
+            });
+
+            describe('with subgroups with multiple operands', function() {
+                beforeEach(function() {
+                    controller.addSubgroup();
+                    var subgroup = controller.operands[controller.operands.length - 1];
+                    subgroup.operands = [
+                        createOperand('sub_foo', 'Inner Foo'),
+                        createOperand('sub_bar', 'Inner Bar')
+                    ];
+                    subgroup.operator = 'AND NOT';
+                });
+
+                it('should properly nest formula', function() {
+                    expect(controller.formula()).toEqual('Bar AND Foo AND (NOT Inner Foo AND NOT Inner Bar)');
+                });
+            });
+        });
     });
 
     describe('with a subgroup', function() {
@@ -119,13 +165,17 @@ describe('expressionGroup directive', function() {
             });
         });
 
+        it('should allow getting the "formula" of the subgroup', function() {
+            expect(controller.formula()).toEqual('()');
+        });
+
         it('should get -1 for index of operands that are subgroups', function() {
             expect(controller.getIndexOfOperand(controller.operands[0])).toBe(-1);
         });
 
         describe('that has an operand', function() {
             beforeEach(function() {
-                controller.operands[0].operands.push(fooOperand);
+                controller.operands[0].operands.push(createOperand('bar', 'Bar'));
             });
 
             it('should allow getting the "value" of all its descendents', function() {
@@ -144,6 +194,10 @@ describe('expressionGroup directive', function() {
                         }
                     ]
                 });
+            });
+
+            it('should allow getting the "formula" of all its descendents', function() {
+                expect(controller.formula()).toEqual('(Bar)');
             });
         });
     });

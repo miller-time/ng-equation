@@ -69,6 +69,26 @@ angular.module('ngEquation')
             };
         };
 
+        function getFormula(operands, operator) {
+            var operandFormulas = [];
+            angular.forEach(operands, function(operand) {
+                if (ctrl.isSubgroup(operand)) {
+                    operandFormulas.push(['(', getFormula(operand.operands, operand.operator), ')'].join(''));
+                } else {
+                    operandFormulas.push(operand.getLabel(operand));
+                }
+            });
+            var prefix = '';
+            if (operator === 'AND NOT') {
+                prefix = 'NOT ';
+            }
+            return prefix + operandFormulas.join(' ' + operator + ' ');
+        }
+
+        ctrl.formula = function() {
+            return getFormula(ctrl.operands, ctrl.operator);
+        };
+
         if (angular.isFunction(ctrl.onReady)) {
             var groupApi = {
                 value: ctrl.value
