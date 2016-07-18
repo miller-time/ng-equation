@@ -20,9 +20,18 @@ angular.module('ngEquation')
             return value;
         };
 
+        ctrl.formula = function() {
+            var formula;
+            if (ctrl.groupApi) {
+                formula = ctrl.groupApi.formula();
+            }
+            return formula;
+        };
+
         if (angular.isFunction(ctrl.onReady)) {
             var equationApi = {
-                value: ctrl.value
+                value: ctrl.value,
+                formula: ctrl.formula
             };
             ctrl.onReady({equationApi: equationApi});
         }

@@ -20,4 +20,12 @@ angular.module('exampleApp', ['ngEquation'])
                 return '';
             }
         };
+
+        ctrl.formula = function() {
+            var formula = '';
+            if (ctrl.equationApi) {
+                formula = ctrl.equationApi.formula();
+            }
+            return formula ? formula : 'N/A';
+        }
     });
