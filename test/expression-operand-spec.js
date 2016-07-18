@@ -101,37 +101,15 @@ describe('expressionOperand directive', function() {
             expect(controller.options.value).toEqual('newValue');
         });
 
-        it('should not call "removeFromGroup" if pre-existing value and operand\'s "editMetadata" does not return a value', function() {
-            controller.options.value = 'existing_value';
-            controller.options.editMetadata = function() { return undefined; };
-            controller.removeFromGroup = jasmine.createSpy('removeFromGroupSpy');
-            controller.editMetadata();
-            $scope.$apply();
-            expect(controller.removeFromGroup).not.toHaveBeenCalled();
-        });
-
         it('should call "removeFromGroup" method when no initial value and operand\'s "editMetadata" does not return a value', function() {
-            delete controller.options.value;
             controller.options.editMetadata = function() { return undefined; };
             controller.removeFromGroup = jasmine.createSpy('removeFromGroupSpy');
             controller.editMetadata();
             $scope.$apply();
             expect(controller.removeFromGroup).toHaveBeenCalled();
-        });
-
-        it('should not call "removeFromGroup" if pre-existing value and operand\'s "editMetadata" is a rejected promise', function() {
-            controller.options.value = 'existing_value';
-            var deferred = $q.defer();
-            controller.options.editMetadata = function() { return deferred.promise; };
-            controller.removeFromGroup = jasmine.createSpy('removeFromGroupSpy');
-            controller.editMetadata();
-            deferred.reject();
-            $scope.$apply();
-            expect(controller.removeFromGroup).not.toHaveBeenCalled();
         });
 
         it('should call "removeFromGroup" method when no initial value and operand\'s "editMetadata" is a rejected promise', function() {
-            delete controller.options.value;
             var deferred = $q.defer();
             controller.options.editMetadata = function() { return deferred.promise; };
             controller.removeFromGroup = jasmine.createSpy('removeFromGroupSpy');
@@ -139,6 +117,40 @@ describe('expressionOperand directive', function() {
             deferred.reject();
             $scope.$apply();
             expect(controller.removeFromGroup).toHaveBeenCalled();
+        });
+    });
+
+    describe('initialized with a value', function() {
+        var controller,
+            operandOptions;
+
+        beforeEach(function() {
+            operandOptions = {
+                class: 'foo',
+                typeLabel: 'Foo',
+                getLabel: jasmine.createSpy('fooOperand.getLabel'),
+                editMetadata: jasmine.createSpy('fooOperand.editMetadata'),
+                value: 'bar'
+            };
+            controller = instantiate(operandOptions);
+        });
+
+        it('should not call "removeFromGroup" when operand\'s "editMetadata" does not return a value', function() {
+            controller.options.editMetadata = function() { return undefined; };
+            controller.removeFromGroup = jasmine.createSpy('removeFromGroupSpy');
+            controller.editMetadata();
+            $scope.$apply();
+            expect(controller.removeFromGroup).not.toHaveBeenCalled();
+        });
+
+        it('should not call "removeFromGroup" when operand\'s "editMetadata" is a rejected promise', function() {
+            var deferred = $q.defer();
+            controller.options.editMetadata = function() { return deferred.promise; };
+            controller.removeFromGroup = jasmine.createSpy('removeFromGroupSpy');
+            controller.editMetadata();
+            deferred.reject();
+            $scope.$apply();
+            expect(controller.removeFromGroup).not.toHaveBeenCalled();
         });
     });
 
