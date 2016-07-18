@@ -2,6 +2,7 @@
 
 describe('expressionOperand directive', function() {
     var $exceptionHandler,
+        $log,
         $scope,
         $q,
         instantiate;
@@ -12,9 +13,10 @@ describe('expressionOperand directive', function() {
         $exceptionHandlerProvider.mode('log');
     }));
 
-    beforeEach(inject(function($compile, _$exceptionHandler_, $rootScope, $timeout, _$q_) {
+    beforeEach(inject(function($compile, _$exceptionHandler_, $rootScope, $timeout, _$q_, _$log_) {
         $exceptionHandler = _$exceptionHandler_;
         $q = _$q_;
+        $log = _$log_;
 
         instantiate = function(options, group) {
             var controller;
@@ -141,6 +143,9 @@ describe('expressionOperand directive', function() {
             controller.editMetadata();
             $scope.$apply();
             expect(controller.removeFromGroup).not.toHaveBeenCalled();
+            expect($log.warn.logs).toEqual([[
+                'editMetadata resulted in undefined value, operand will retain previous value of bar'
+            ]]);
         });
 
         it('should not call "removeFromGroup" when operand\'s "editMetadata" is a rejected promise', function() {
