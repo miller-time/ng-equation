@@ -70,4 +70,8 @@ describe('equation directive', function() {
             expect(labelElem.text().trim()).toEqual('Custom');
         });
     });
+
+    it('should allow getting "formula" of the topLevelGroup', function() {
+        expect(controller.formula()).toEqual('');
+    });
 });

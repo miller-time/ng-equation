@@ -91,7 +91,8 @@ angular.module('ngEquation')
 
         if (angular.isFunction(ctrl.onReady)) {
             var groupApi = {
-                value: ctrl.value
+                value: ctrl.value,
+                formula: ctrl.formula
             };
             ctrl.onReady({groupApi: groupApi});
         }
