@@ -23,6 +23,9 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
     return {
         restrict: "EA",
         scope: {},
+        transclude: {
+            toolboxLabel: "?toolboxLabel"
+        },
         bindToController: {
             options: "=equationOptions",
             "class": "@equationClass",
@@ -35,7 +38,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
 } ]), angular.module("ngEquation").controller("ExpressionGroupCtrl", function() {
     function getValue(operand) {
         var value;
-        return value = operand.operands ? {
+        return value = ctrl.isSubgroup(operand) ? {
             operator: operand.operator,
             children: operand.operands.map(function(childOperand) {
                 return getValue(childOperand);
@@ -54,8 +57,10 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
             operator: "AND",
             operands: []
         });
+    }, ctrl.isSubgroup = function(operand) {
+        return !!operand.operands;
     }, ctrl.getIndexOfOperand = function(operand) {
-        for (var i = 0; i < ctrl.operands.length; ++i) if (ctrl.operands[i].value === operand.value) return i;
+        if (!ctrl.isSubgroup(operand)) for (var i = 0, len = ctrl.operands.length; i < len; i++) if (!ctrl.isSubgroup(ctrl.operands[i]) && ctrl.operands[i].value === operand.value) return i;
         return -1;
     }, ctrl.removeSubgroup = function(subgroupId) {
         ctrl.operands.splice(subgroupId, 1);
@@ -137,14 +142,18 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
     };
 }).controller("ExpressionOperandCtrl", [ "$q", "operandOptions", function($q, operandOptions) {
     var ctrl = this;
-    operandOptions.validate(ctrl.options), ctrl.removeFromGroup = function() {
+    operandOptions.validate(ctrl.options);
+    var isValueInitialized = angular.isDefined(ctrl.options.value);
+    ctrl.removeFromGroup = function() {
         ctrl.group && ctrl.group.removeOperand(ctrl.options);
     }, ctrl.editMetadata = function() {
         var editResult = ctrl.options.editMetadata();
         $q.when(editResult).then(function(result) {
-            ctrl.options.value = result;
+            angular.isDefined(result) ? (ctrl.options.value = result, isValueInitialized = !0) : isValueInitialized || ctrl.removeFromGroup();
+        }, function() {
+            isValueInitialized || ctrl.removeFromGroup();
         });
-    }, ctrl.group && ctrl.editMetadata();
+    }, ctrl.group && angular.isUndefined(ctrl.options.value) && ctrl.editMetadata();
 } ]).directive("expressionOperand", [ "$templateCache", "expressionOperandDragNDrop", function($templateCache, expressionOperandDragNDrop) {
     return {
         restrict: "EA",
@@ -165,6 +174,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         setup: function(scope, element) {
             $window.interact(element.find(".eq-new-operand")[0]).dropzone({
                 accept: ".eq-operand",
+                overlap: .1,
                 checker: function(dragEvent, event, dropped, dropZone, dropElement, draggable, draggableElement) {
                     var operandCtrl = angular.element(draggableElement).scope().operand, groupScope = angular.element(dropElement).scope();
                     if (groupScope) {

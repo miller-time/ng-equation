@@ -5,9 +5,11 @@ angular.module("equation.html", []).run(["$templateCache", function($templateCac
     "<span class=\"ng-equation\" ng-class=\"equation.class\">\n" +
     "\n" +
     "    <span class=\"eq-toolbox-container\">\n" +
-    "        <label class=\"eq-toolbox-label\">\n" +
-    "            Toolbox\n" +
-    "        </label>\n" +
+    "        <span ng-transclude=\"toolboxLabel\">\n" +
+    "            <label class=\"eq-toolbox-label\">\n" +
+    "                Toolbox\n" +
+    "            </label>\n" +
+    "        </span>\n" +
     "        <expression-operand-toolbox\n" +
     "            operands=\"equation.options.availableOperands\">\n" +
     "        </expression-operand-toolbox>\n" +
