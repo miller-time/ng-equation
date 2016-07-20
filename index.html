@@ -32,12 +32,19 @@
 
         <equation
             equation-options="example.config"
-            equation-class="basic"
+            equation-class="basic {{example.enableFlex ? 'flex' : ''}}"
             on-ready="example.onEquationReady(equationApi)">
             <toolbox-label>
                 <h3><i>Toolbox</i></h3>
             </toolbox-label>
         </equation>
+
+        <div style="margin-top: 25px">
+            <label>
+                Enable FlexBox
+                <input type="checkbox" ng-model="example.enableFlex">
+            </label>
+        </div>
 
         <hr>
 
@@ -46,7 +53,8 @@
                 <uib-tab-heading class="form-group">
                     <label>JSON</label>
                 </uib-tab-heading>
-                <pre>{{example.toJson()}}</pre></uib-tab>
+                <pre>{{example.toJson()}}</pre>
+            </uib-tab>
             <uib-tab index="1" heading="Formula">
                 <uib-tab-heading class="form-group">
                     <label>Formula</label>

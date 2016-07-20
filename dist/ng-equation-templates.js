@@ -5,12 +5,14 @@ angular.module("equation.html", []).run(["$templateCache", function($templateCac
     "<span class=\"ng-equation\" ng-class=\"equation.class\">\n" +
     "\n" +
     "    <span class=\"eq-toolbox-container\">\n" +
-    "        <span ng-transclude=\"toolboxLabel\">\n" +
+    "        <span ng-transclude=\"toolboxLabel\"\n" +
+    "            class=\"eq-toolbox-label-container\">\n" +
     "            <label class=\"eq-toolbox-label\">\n" +
     "                Toolbox\n" +
     "            </label>\n" +
     "        </span>\n" +
     "        <expression-operand-toolbox\n" +
+    "            class=\"eq-toolbox-group-container\"\n" +
     "            operands=\"equation.options.availableOperands\">\n" +
     "        </expression-operand-toolbox>\n" +
     "    </span>\n" +
@@ -32,7 +34,9 @@ angular.module("expression-group.html", []).run(["$templateCache", function($tem
   $templateCache.put("expression-group.html",
     "<span class=\"eq-group\">\n" +
     "\n" +
-    "    <span ng-repeat=\"operand in group.operands\">\n" +
+    "    <span ng-repeat-start=\"operand in group.operands\"\n" +
+    "        class=\"eq-operand-container\"\n" +
+    "        ng-class=\"{'eq-group-container': operand.operands}\">\n" +
     "        <span ng-if=\"$first && group.operator === 'AND NOT'\" class=\"eq-operator\">\n" +
     "            NOT\n" +
     "        </span>\n" +
@@ -55,30 +59,30 @@ angular.module("expression-group.html", []).run(["$templateCache", function($tem
     "                operand-options=\"operand\">\n" +
     "            </expression-operand>\n" +
     "        </span>\n" +
-    "\n" +
-    "        <div class=\"btn-group\" uib-dropdown ng-if=\"!$last\">\n" +
-    "            <button class=\"eq-operator btn\" uib-dropdown-toggle>\n" +
-    "                {{group.operator}} <span class=\"caret\"></span>\n" +
-    "            </button>\n" +
-    "            <ul class=\"dropdown-menu\" uib-dropdown-menu>\n" +
-    "                <li ng-class=\"{'active': group.operator === 'AND'}\">\n" +
-    "                    <a href ng-click=\"group.operator = 'AND'\">\n" +
-    "                        AND\n" +
-    "                    </a>\n" +
-    "                </li>\n" +
-    "                <li ng-class=\"{'active': group.operator === 'OR'}\">\n" +
-    "                    <a href ng-click=\"group.operator = 'OR'\">\n" +
-    "                        OR\n" +
-    "                    </a>\n" +
-    "                </li>\n" +
-    "                <li ng-class=\"{'active': group.operator === 'AND NOT'}\">\n" +
-    "                    <a href ng-click=\"group.operator = 'AND NOT'\">\n" +
-    "                        AND NOT\n" +
-    "                    </a>\n" +
-    "                </li>\n" +
-    "            </ul>\n" +
-    "        </div>\n" +
     "    </span>\n" +
+    "\n" +
+    "    <div ng-repeat-end class=\"btn-group\" uib-dropdown ng-if=\"!$last\">\n" +
+    "        <button class=\"eq-operator btn\" uib-dropdown-toggle>\n" +
+    "            {{group.operator}} <span class=\"caret\"></span>\n" +
+    "        </button>\n" +
+    "        <ul class=\"dropdown-menu\" uib-dropdown-menu>\n" +
+    "            <li ng-class=\"{'active': group.operator === 'AND'}\">\n" +
+    "                <a href ng-click=\"group.operator = 'AND'\">\n" +
+    "                    AND\n" +
+    "                </a>\n" +
+    "            </li>\n" +
+    "            <li ng-class=\"{'active': group.operator === 'OR'}\">\n" +
+    "                <a href ng-click=\"group.operator = 'OR'\">\n" +
+    "                    OR\n" +
+    "                </a>\n" +
+    "            </li>\n" +
+    "            <li ng-class=\"{'active': group.operator === 'AND NOT'}\">\n" +
+    "                <a href ng-click=\"group.operator = 'AND NOT'\">\n" +
+    "                    AND NOT\n" +
+    "                </a>\n" +
+    "            </li>\n" +
+    "        </ul>\n" +
+    "    </div>\n" +
     "\n" +
     "    <div class=\"btn-group\" uib-dropdown>\n" +
     "        <button class=\"eq-new-operand btn\" uib-dropdown-toggle>\n" +
