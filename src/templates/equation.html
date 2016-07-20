@@ -1,12 +1,14 @@
 <span class="ng-equation" ng-class="equation.class">
 
     <span class="eq-toolbox-container">
-        <span ng-transclude="toolboxLabel">
+        <span ng-transclude="toolboxLabel"
+            class="eq-toolbox-label-container">
             <label class="eq-toolbox-label">
                 Toolbox
             </label>
         </span>
         <expression-operand-toolbox
+            class="eq-toolbox-group-container"
             operands="equation.options.availableOperands">
         </expression-operand-toolbox>
     </span>
