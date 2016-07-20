@@ -1,6 +1,8 @@
 <span class="eq-group">
 
-    <span ng-repeat="operand in group.operands">
+    <span ng-repeat-start="operand in group.operands"
+        class="eq-operand-container"
+        ng-class="{'eq-group-container': operand.operands}">
         <span ng-if="$first && group.operator === 'AND NOT'" class="eq-operator">
             NOT
         </span>
@@ -23,30 +25,30 @@
                 operand-options="operand">
             </expression-operand>
         </span>
-
-        <div class="btn-group" uib-dropdown ng-if="!$last">
-            <button class="eq-operator btn" uib-dropdown-toggle>
-                {{group.operator}} <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" uib-dropdown-menu>
-                <li ng-class="{'active': group.operator === 'AND'}">
-                    <a href ng-click="group.operator = 'AND'">
-                        AND
-                    </a>
-                </li>
-                <li ng-class="{'active': group.operator === 'OR'}">
-                    <a href ng-click="group.operator = 'OR'">
-                        OR
-                    </a>
-                </li>
-                <li ng-class="{'active': group.operator === 'AND NOT'}">
-                    <a href ng-click="group.operator = 'AND NOT'">
-                        AND NOT
-                    </a>
-                </li>
-            </ul>
-        </div>
     </span>
+
+    <div ng-repeat-end class="btn-group" uib-dropdown ng-if="!$last">
+        <button class="eq-operator btn" uib-dropdown-toggle>
+            {{group.operator}} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu>
+            <li ng-class="{'active': group.operator === 'AND'}">
+                <a href ng-click="group.operator = 'AND'">
+                    AND
+                </a>
+            </li>
+            <li ng-class="{'active': group.operator === 'OR'}">
+                <a href ng-click="group.operator = 'OR'">
+                    OR
+                </a>
+            </li>
+            <li ng-class="{'active': group.operator === 'AND NOT'}">
+                <a href ng-click="group.operator = 'AND NOT'">
+                    AND NOT
+                </a>
+            </li>
+        </ul>
+    </div>
 
     <div class="btn-group" uib-dropdown>
         <button class="eq-new-operand btn" uib-dropdown-toggle>

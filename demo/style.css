@@ -1,3 +1,7 @@
+.ng-equation.flex .eq-toolbox-container {
+    flex-direction: column;
+}
+
 .eq-operand.fruit, .eq-operand-menu-item.fruit {
     background-color: lightblue;
     color: white;
