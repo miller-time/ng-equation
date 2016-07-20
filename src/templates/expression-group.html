@@ -1,6 +1,8 @@
 <span class="eq-group">
 
-    <span ng-repeat="operand in group.operands">
+    <span ng-repeat-start="operand in group.operands"
+        class="eq-operand-container"
+        ng-class="{'eq-group-container': operand.operands}">
         <span ng-if="$first && group.operator === 'AND NOT'" class="eq-operator">
             NOT
         </span>
