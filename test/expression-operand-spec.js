@@ -83,7 +83,9 @@ describe('expressionOperand directive', function() {
                 typeLabel: 'Foo',
                 getLabel: jasmine.createSpy('fooOperand.getLabel'),
                 editMetadata: jasmine.createSpy('fooOperand.editMetadata').and.callFake(function() {
-                    return 'newValue';
+                    return {
+                        value: 'newValue'
+                    };
                 })
             };
             controller = instantiate(operandOptions);

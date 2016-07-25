@@ -47,8 +47,8 @@ angular.module('ngEquation')
         ctrl.editMetadata = function() {
             var editResult = ctrl.options.editMetadata();
             $q.when(editResult).then(function(result) {
-                if (angular.isDefined(result)) {
-                    ctrl.options.value = result;
+                if (result && angular.isDefined(result.value)) {
+                    ctrl.options.value = result.value;
                     isValueInitialized = true;
                 } else if (!isValueInitialized) {
                     ctrl.removeFromGroup();
