@@ -19,7 +19,7 @@ angular.module('exampleApp')
                     $scope.fruit = {};
                     $scope.submit = function() {
                         var value = $scope.fruit.selected && $scope.fruit.selected.value;
-                        $uibModalInstance.close(value);
+                        $uibModalInstance.close({value: value});
                     };
                     $scope.cancel = function() {
                         $uibModalInstance.dismiss();
