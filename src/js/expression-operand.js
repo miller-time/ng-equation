@@ -44,11 +44,34 @@ angular.module('ngEquation')
             }
         };
 
+        function addAdditionalOperands(values) {
+            if (ctrl.group) {
+                angular.forEach(values, function(value) {
+                    var newOperand = angular.copy(ctrl.options);
+                    newOperand.value = value;
+                    ctrl.group.addOperand(newOperand);
+                });
+            } else {
+                $log.error('unable to add additional operands because there is no group');
+            }
+        }
+
         ctrl.editMetadata = function() {
             var editResult = ctrl.options.editMetadata();
             $q.when(editResult).then(function(result) {
-                if (result && angular.isDefined(result.value)) {
-                    ctrl.options.value = result.value;
+                var value = result && result.value,
+                    addMultiple = result && result.addMultiple;
+
+                if (angular.isDefined(value)) {
+                    if (angular.isArray(value) && addMultiple) {
+                        ctrl.options.value = value[0];
+                        addAdditionalOperands(value.slice(1));
+                    } else if (!angular.isArray(value) && addMultiple) {
+                        $log.error('editMetadata did not return an array but had "addMultiple" turned on');
+                    } else {
+                        ctrl.options.value = value;
+                    }
+
                     isValueInitialized = true;
                 } else if (!isValueInitialized) {
                     ctrl.removeFromGroup();
