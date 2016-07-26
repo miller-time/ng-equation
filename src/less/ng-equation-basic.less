@@ -1,4 +1,5 @@
 @lime-green: #00ec00;
+@teal: #8fece0;
 @light-red: #f19e9e;
 
 .ng-equation.basic {
@@ -12,13 +13,20 @@
             box-shadow: 0 0 7px 3px @lime-green;
         }
 
-        .eq-remove-operand {
-            background-color: @light-red;
+        .eq-edit-operand, .eq-remove-operand {
             display: none;
         }
 
+        .eq-edit-operand {
+            background-color: @teal;
+        }
+
+        .eq-remove-operand {
+            background-color: @light-red;
+        }
+
         &:hover {
-            .eq-remove-operand {
+            .eq-edit-operand, .eq-remove-operand {
                 display: block;
             }
         }

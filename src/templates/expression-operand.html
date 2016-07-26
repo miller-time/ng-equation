@@ -8,6 +8,12 @@
             {{operand.options.typeLabel}}
         </span>
 
+        <button class="eq-edit-operand"
+            ng-if="operand.options.value"
+            ng-click="operand.editMetadata()">
+            &#x270E;
+        </button>
+
         <button class="eq-remove-operand"
             ng-if="operand.group"
             ng-click="operand.removeFromGroup()">
