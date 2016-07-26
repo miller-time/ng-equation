@@ -67,7 +67,7 @@ angular.module('ngEquation')
                         ctrl.options.value = value[0];
                         addAdditionalOperands(value.slice(1));
                     } else if (!angular.isArray(value) && addMultiple) {
-                        $log.error('editMetadata did not return an array but had "addMultiple" turned on');
+                        $log.error('editMetadata must return an array when using the "addMultiple" option');
                     } else {
                         ctrl.options.value = value;
                     }
