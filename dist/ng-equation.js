@@ -168,7 +168,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
     ctrl.removeFromGroup = function() {
         ctrl.group && ctrl.group.removeOperand(ctrl.options);
     }, ctrl.editMetadata = function() {
-        var editResult = ctrl.options.editMetadata();
+        var editResult = ctrl.options.editMetadata(ctrl.options);
         $q.when(editResult).then(function(result) {
             var value = result && result.value, addMultiple = result && result.addMultiple;
             angular.isDefined(value) ? (angular.isArray(value) && addMultiple ? (ctrl.options.value = value[0], 
@@ -177,7 +177,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         }, function() {
             isValueInitialized || ctrl.removeFromGroup();
         });
-    }, ctrl.group && angular.isUndefined(ctrl.options.value) && ctrl.editMetadata();
+    }, ctrl.group && angular.isUndefined(ctrl.options.value) && ctrl.editMetadata(ctrl.options);
 } ]).directive("expressionOperand", [ "$templateCache", "expressionOperandDragNDrop", function($templateCache, expressionOperandDragNDrop) {
     return {
         restrict: "EA",
