@@ -16,10 +16,17 @@ angular.module('exampleApp')
                     $scope.fruits = fruits.map(function(fruit) {
                         return {label: capitalize(fruit), value: fruit};
                     });
-                    $scope.fruit = {};
+                    $scope.fruit = {
+                        selected: [{}]
+                    };
+                    $scope.addAnother = function() {
+                        $scope.fruit.selected.push({});
+                    };
                     $scope.submit = function() {
-                        var value = $scope.fruit.selected && $scope.fruit.selected.value;
-                        $uibModalInstance.close(value);
+                        var values = $scope.fruit.selected.map(function(fruit) {
+                            return fruit.obj.value;
+                        });
+                        $uibModalInstance.close({value: values, addMultiple: true});
                     };
                     $scope.cancel = function() {
                         $uibModalInstance.dismiss();

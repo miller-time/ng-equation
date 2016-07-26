@@ -83,7 +83,9 @@ describe('expressionOperand directive', function() {
                 typeLabel: 'Foo',
                 getLabel: jasmine.createSpy('fooOperand.getLabel'),
                 editMetadata: jasmine.createSpy('fooOperand.editMetadata').and.callFake(function() {
-                    return 'newValue';
+                    return {
+                        value: 'newValue'
+                    };
                 })
             };
             controller = instantiate(operandOptions);
@@ -187,6 +189,57 @@ describe('expressionOperand directive', function() {
             instantiate(operandOptions, {message: "I'm a group!"});
 
             expect(operandOptions.editMetadata).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('configured to add multiple operands at once', function() {
+        var group,
+            operandOptions = {
+                class: 'foos',
+                typeLabel: 'Foos',
+                getLabel: function() {
+                    return 'foos';
+                }
+            };
+
+        beforeEach(function() {
+            group = {
+                addOperand: jasmine.createSpy('group.addOperand')
+            };
+            operandOptions.editMetadata = function() {
+                return {
+                    value: ['a', 'b', 'c'],
+                    addMultiple: true
+                };
+            };
+
+            instantiate(operandOptions, group);
+        });
+
+        it('should call addOperand for the additional values returned from editMetadata', function() {
+            var allAddOperandCallArgs = group.addOperand.calls.all().map(function(call) {
+                return call.args;
+            });
+            expect(allAddOperandCallArgs).toEqual([
+                [
+                    {
+                        class: 'foos',
+                        typeLabel: 'Foos',
+                        getLabel: jasmine.any(Function),
+                        editMetadata: jasmine.any(Function),
+                        value: 'b'
+                    }
+                ],
+                [
+                    {
+                        class: 'foos',
+                        typeLabel: 'Foos',
+                        getLabel: jasmine.any(Function),
+                        editMetadata: jasmine.any(Function),
+                        value: 'c'
+                    }
+                ]
+            ]);
         });
     });
 });
