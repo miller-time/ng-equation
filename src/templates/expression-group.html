@@ -72,7 +72,8 @@
 
     <button class="eq-remove-group"
         ng-if="group.parent"
-        ng-click="group.parent.removeSubgroup(group.subgroupId)">
+        uib-popover-template="group.confirmTemplate"
+        popover-trigger="outsideClick">
         Remove Group
     </button>
 </span>

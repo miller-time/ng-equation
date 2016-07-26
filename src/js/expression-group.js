@@ -4,6 +4,8 @@ angular.module('ngEquation')
     .controller('ExpressionGroupCtrl', function() {
         var ctrl = this;
 
+        ctrl.confirmTemplate = 'confirm-popover.html';
+
         ctrl.addOperand = function(operand) {
             ctrl.operands.push(angular.copy(operand));
         };
