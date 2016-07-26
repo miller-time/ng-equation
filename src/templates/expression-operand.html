@@ -16,7 +16,8 @@
 
         <button class="eq-remove-operand"
             ng-if="operand.group"
-            ng-click="operand.removeFromGroup()">
+            uib-popover-template="operand.confirmTemplate"
+            popover-trigger="outsideClick">
             &times;
         </button>
     </span>

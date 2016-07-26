@@ -34,6 +34,8 @@ angular.module('ngEquation')
     .controller('ExpressionOperandCtrl', function($q, $log, operandOptions) {
         var ctrl = this;
 
+        ctrl.confirmTemplate = 'confirm-popover.html';
+
         operandOptions.validate(ctrl.options);
 
         var isValueInitialized = angular.isDefined(ctrl.options.value);
