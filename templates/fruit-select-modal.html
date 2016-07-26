@@ -1,12 +1,19 @@
 <div class="modal-body">
     <div class="form-group">
         <label>Fruit</label>
-        <select
-            class="form-control"
-            ng-options="fruit.label for fruit in fruits track by fruit.value"
-            ng-model="fruit.selected">
-        </select>
+        <div ng-repeat="selection in fruit.selected">
+            <select
+                class="form-control"
+                ng-options="fruit.label for fruit in fruits track by fruit.value"
+                ng-model="selection.obj">
+            </select>
+        </div>
     </div>
+
+    <button class="btn btn-primary"
+        ng-click="addAnother()">
+        Add Another
+    </button>
 </div>
 <div class="modal-footer">
     <button ng-click="submit()">Submit</button>

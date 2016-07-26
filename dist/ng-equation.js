@@ -156,6 +156,12 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         }
     };
 }).controller("ExpressionOperandCtrl", [ "$q", "$log", "operandOptions", function($q, $log, operandOptions) {
+    function addAdditionalOperands(values) {
+        ctrl.group ? angular.forEach(values, function(value) {
+            var newOperand = angular.copy(ctrl.options);
+            newOperand.value = value, ctrl.group.addOperand(newOperand);
+        }) : $log.error("unable to add additional operands because there is no group");
+    }
     var ctrl = this;
     operandOptions.validate(ctrl.options);
     var isValueInitialized = angular.isDefined(ctrl.options.value);
@@ -164,7 +170,10 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
     }, ctrl.editMetadata = function() {
         var editResult = ctrl.options.editMetadata();
         $q.when(editResult).then(function(result) {
-            angular.isDefined(result) ? (ctrl.options.value = result, isValueInitialized = !0) : isValueInitialized ? $log.warn("editMetadata resulted in undefined value, operand will retain previous value of " + ctrl.options.value) : ctrl.removeFromGroup();
+            var value = result && result.value, addMultiple = result && result.addMultiple;
+            angular.isDefined(value) ? (angular.isArray(value) && addMultiple ? (ctrl.options.value = value[0], 
+            addAdditionalOperands(value.slice(1))) : !angular.isArray(value) && addMultiple ? $log.error('editMetadata must return an array when using the "addMultiple" option') : ctrl.options.value = value, 
+            isValueInitialized = !0) : isValueInitialized ? $log.warn("editMetadata resulted in undefined value, operand will retain previous value of " + ctrl.options.value) : ctrl.removeFromGroup();
         }, function() {
             isValueInitialized || ctrl.removeFromGroup();
         });
