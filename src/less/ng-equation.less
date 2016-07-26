@@ -19,11 +19,22 @@
         transform: translate(0, 0);
     }
 
-    .eq-remove-operand {
+    .eq-edit-operand, .eq-remove-operand {
+        position: absolute;
+        top: -10px;
+        font-size: 11px;
         border: 1px solid transparent;
-        border-radius: 14px;
-        padding: 2px 8px;
+        border-radius: 5px;
+        padding: 1px 4px;
         background-color: darkgray;
+    }
+
+    .eq-edit-operand {
+        right: 13px;
+    }
+
+    .eq-remove-operand {
+        right: -4px;
     }
 
     .eq-operator {

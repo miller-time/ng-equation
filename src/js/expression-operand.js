@@ -57,7 +57,7 @@ angular.module('ngEquation')
         }
 
         ctrl.editMetadata = function() {
-            var editResult = ctrl.options.editMetadata();
+            var editResult = ctrl.options.editMetadata(ctrl.options);
             $q.when(editResult).then(function(result) {
                 var value = result && result.value,
                     addMultiple = result && result.addMultiple;
@@ -86,7 +86,7 @@ angular.module('ngEquation')
         };
 
         if (ctrl.group && angular.isUndefined(ctrl.options.value)) {
-            ctrl.editMetadata();
+            ctrl.editMetadata(ctrl.options);
         }
     })
     .directive('expressionOperand', function($templateCache, expressionOperandDragNDrop) {
