@@ -141,6 +141,12 @@ angular.module("expression-operand.html", []).run(["$templateCache", function($t
     "            {{operand.options.typeLabel}}\n" +
     "        </span>\n" +
     "\n" +
+    "        <button class=\"eq-edit-operand\"\n" +
+    "            ng-if=\"operand.options.value\"\n" +
+    "            ng-click=\"operand.editMetadata()\">\n" +
+    "            &#x270E;\n" +
+    "        </button>\n" +
+    "\n" +
     "        <button class=\"eq-remove-operand\"\n" +
     "            ng-if=\"operand.group\"\n" +
     "            ng-click=\"operand.removeFromGroup()\">\n" +
