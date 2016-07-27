@@ -3,10 +3,22 @@
 angular.module('ngEquation')
     .factory('operandOptions', function() {
         var operandOptionsApi = {
-            class: 'string',
-            typeLabel: 'string',
-            editMetadata: 'function',
-            getLabel: 'function'
+            class: {
+                type: 'string',
+                required: true
+            },
+            typeLabel: {
+                type: 'string',
+                required: true
+            },
+            editMetadata: {
+                type: 'function',
+                required: true
+            },
+            getLabel: {
+                type: 'function',
+                required: true
+            }
         };
 
         function MissingOperandOptionException(property) {
@@ -21,11 +33,11 @@ angular.module('ngEquation')
 
         return {
             validate: function(obj) {
-                angular.forEach(operandOptionsApi, function(propertyType, apiProperty) {
-                    if (!obj[apiProperty]) {
-                        throw new MissingOperandOptionException(apiProperty);
-                    } else if (typeof(obj[apiProperty]) !== propertyType) {
-                        throw new OperandOptionTypeException(apiProperty, propertyType, typeof(obj[apiProperty]));
+                angular.forEach(operandOptionsApi, function(propertyOptions, propertyName) {
+                    if (propertyOptions.required && !(propertyName in obj)) {
+                        throw new MissingOperandOptionException(propertyName);
+                    } else if (propertyName in obj && typeof(obj[propertyName]) !== propertyOptions.type) {
+                        throw new OperandOptionTypeException(propertyName, propertyOptions.type, typeof(obj[propertyName]));
                     }
                 });
             }
