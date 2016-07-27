@@ -5,12 +5,12 @@ describe('equation directive', function() {
         element,
         controller,
         instantiate,
-        MissingOperandClassException;
+        UnknownOperandClassException;
 
     beforeEach(module('ngEquation'));
 
-    beforeEach(inject(function($compile, $rootScope, _MissingOperandClassException_) {
-        MissingOperandClassException = _MissingOperandClassException_;
+    beforeEach(inject(function($compile, $rootScope, _UnknownOperandClassException_) {
+        UnknownOperandClassException = _UnknownOperandClassException_;
         $scope = $rootScope.$new();
         $scope.myOptions = {opt: 1};
 
@@ -151,7 +151,7 @@ describe('equation directive', function() {
                 }]
             });
         }).toThrowError(
-            MissingOperandClassException,
+            UnknownOperandClassException,
             'Available operands does not include an operand with class "car".'
         );
     });

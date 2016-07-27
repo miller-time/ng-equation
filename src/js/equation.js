@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('ngEquation')
-    .controller('EquationCtrl', function($filter, MissingOperandClassException) {
+    .controller('EquationCtrl', function($filter, UnknownOperandClassException) {
         var ctrl = this;
 
         ctrl.topLevelGroup = {
@@ -36,7 +36,7 @@ angular.module('ngEquation')
             } else {
                 var matchingOperandConfig = $filter('filter')(ctrl.options.availableOperands, {class: operand.class})[0];
                 if (angular.isUndefined(matchingOperandConfig)) {
-                    throw new MissingOperandClassException(operand.class);
+                    throw new UnknownOperandClassException(operand.class);
                 }
                 angular.extend(operand, matchingOperandConfig);
             }
