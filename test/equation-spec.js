@@ -4,11 +4,13 @@ describe('equation directive', function() {
     var $scope,
         element,
         controller,
-        instantiate;
+        instantiate,
+        MissingOperandClassException;
 
     beforeEach(module('ngEquation'));
 
-    beforeEach(inject(function($compile, $rootScope) {
+    beforeEach(inject(function($compile, $rootScope, _MissingOperandClassException_) {
+        MissingOperandClassException = _MissingOperandClassException_;
         $scope = $rootScope.$new();
         $scope.myOptions = {opt: 1};
 
@@ -73,5 +75,84 @@ describe('equation directive', function() {
 
     it('should allow getting "formula" of the topLevelGroup', function() {
         expect(controller.formula()).toEqual('');
+    });
+
+    it('should load an equation and attach the the available operand properties to operands of the equation', function() {
+        instantiate();
+        controller.options.availableOperands = [{
+            class: 'fruit',
+            foo: function() { return 'foo'; },
+            bar: 'fruit bar'
+        }, {
+            class: 'animal',
+            bar: 'animal bar'
+        }];
+        controller.loadEquation({
+            operator: 'AND',
+            operands: [
+                {
+                    class: 'fruit',
+                    value: 'banana'
+                },
+                {
+                    operator: 'OR',
+                    operands: [
+                        {
+                            class: 'animal',
+                            value: 'cat'
+                        },
+                        {
+                            class: 'animal',
+                            value: 'dog'
+                        }
+
+                    ]
+                }
+            ]
+        });
+        expect(controller.topLevelGroup).toEqual({
+            onReady: jasmine.any(Function),
+            operator: 'AND',
+            operands: [
+                {
+                    class: 'fruit',
+                    value: 'banana',
+                    foo: jasmine.any(Function),
+                    bar: 'fruit bar'
+                },
+                {
+                    operator: 'OR',
+                    operands: [
+                        {
+                            class: 'animal',
+                            value: 'cat',
+                            bar: 'animal bar'
+                        },
+                        {
+                            class: 'animal',
+                            value: 'dog',
+                            bar: 'animal bar'
+                        }
+                    ]
+                }
+            ]
+        });
+    });
+
+    it('should throw an exception if trying to load operands that don\'t map to an available operand', function() {
+        instantiate();
+        controller.options.availableOperands = [{class: 'bike'}];
+        expect(function() {
+            controller.loadEquation({
+                operator: 'AND',
+                operands: [{
+                    class: 'car',
+                    value: 'corvette'
+                }]
+            });
+        }).toThrowError(
+            MissingOperandClassException,
+            'Available operands does not include an operand with class "car".'
+        );
     });
 });
