@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('ngEquation')
-    .factory('operandOptions', function() {
+    .factory('operandOptions', function(MissingOperandOptionException, OperandOptionTypeException) {
         var operandOptionsApi = {
             class: {
                 type: 'string',
@@ -20,16 +20,6 @@ angular.module('ngEquation')
                 required: true
             }
         };
-
-        function MissingOperandOptionException(property) {
-            this.error = 'Operand options missing required property "' + property + '".';
-        }
-
-        function OperandOptionTypeException(property, expectedType, propertyType) {
-            this.error = 'Operand options property "' + property + '" is incorrect type. ' +
-                'Expected: "' + expectedType + '". ' +
-                'Got: "' + propertyType + '".';
-        }
 
         return {
             validate: function(obj) {

@@ -1,44 +1,46 @@
 'use strict';
 
 describe('expressionOperand directive', function() {
-    var $exceptionHandler,
-        $log,
+    var $log,
         $scope,
         $q,
-        instantiate;
+        instantiate,
+        MissingOperandOptionException,
+        OperandOptionTypeException;
 
     beforeEach(module('ngEquation'));
 
-    beforeEach(module(function($exceptionHandlerProvider) {
-        $exceptionHandlerProvider.mode('log');
-    }));
-
-    beforeEach(inject(function($compile, _$exceptionHandler_, $rootScope, $timeout, _$q_, _$log_) {
-        $exceptionHandler = _$exceptionHandler_;
+    beforeEach(inject(function(
+        $compile,
+        $rootScope,
+        $timeout,
+        _$q_,
+        _$log_,
+        _MissingOperandOptionException_,
+        _OperandOptionTypeException_
+    ) {
         $q = _$q_;
         $log = _$log_;
+        MissingOperandOptionException = _MissingOperandOptionException_;
+        OperandOptionTypeException = _OperandOptionTypeException_;
 
         instantiate = function(options, group) {
             var controller;
 
-            // use $timeout to allow for exception assertions
-            $timeout(function() {
-                $scope = $rootScope.$new();
-                $scope.myOptions = options;
-                $scope.myGroup = group;
+            $scope = $rootScope.$new();
+            $scope.myOptions = options;
+            $scope.myGroup = group;
 
-                var element = angular.element(
-                    '<expression-operand ' +
-                        'operand-options="myOptions" ' +
-                        'group="myGroup">' +
-                    '</expression-operand>'
-                );
-                $compile(element)($scope);
-                $scope.$apply();
+            var element = angular.element(
+                '<expression-operand ' +
+                    'operand-options="myOptions" ' +
+                    'group="myGroup">' +
+                '</expression-operand>'
+            );
+            $compile(element)($scope);
+            $scope.$apply();
 
-                controller = element.isolateScope().operand;
-            });
-            $timeout.flush();
+            controller = element.isolateScope().operand;
 
             return controller;
         };
@@ -51,8 +53,10 @@ describe('expressionOperand directive', function() {
                 typeLabel: 'Foo',
                 getLabel: jasmine.createSpy('fooOperand.getLabel')
             };
-            instantiate(operandOptions);
-            expect($exceptionHandler.errors[0].error).toEqual(
+            expect(function() {
+                instantiate(operandOptions);
+            }).toThrowError(
+                MissingOperandOptionException,
                 'Operand options missing required property "editMetadata".'
             );
         });
@@ -66,8 +70,10 @@ describe('expressionOperand directive', function() {
                 getLabel: jasmine.createSpy('fooOperand.getLabel'),
                 editMetadata: 'edit?'
             };
-            instantiate(operandOptions);
-            expect($exceptionHandler.errors[0].error).toEqual(
+            expect(function() {
+                instantiate(operandOptions);
+            }).toThrowError(
+                OperandOptionTypeException,
                 'Operand options property "editMetadata" is incorrect type. Expected: "function". Got: "string".'
             );
         });
@@ -169,7 +175,7 @@ describe('expressionOperand directive', function() {
                 getLabel: function() {
                     return 'foo';
                 },
-                editMetadata: jasmine.createSpy('fooOperand.editMetadata')
+                editMetadata: jasmine.createSpy('fooOperand.editMetadata').and.returnValue({value: 'bar'})
             };
             instantiate(operandOptions, {message: "I'm a group!"});
 
