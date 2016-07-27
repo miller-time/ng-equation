@@ -18,6 +18,10 @@ angular.module('ngEquation')
             getLabel: {
                 type: 'function',
                 required: true
+            },
+            getTooltipText: {
+                type: 'function',
+                required: false
             }
         };
 
