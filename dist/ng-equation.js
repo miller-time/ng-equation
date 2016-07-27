@@ -1,6 +1,17 @@
 "use strict";
 
-angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angular.module("ngEquation").controller("EquationCtrl", function() {
+angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angular.module("ngEquation").controller("EquationCtrl", [ "$filter", "UnknownOperandClassException", function($filter, UnknownOperandClassException) {
+    function loadOperand(operand) {
+        if (operand.operands) angular.forEach(operand.operands, function(childOperand) {
+            loadOperand(childOperand);
+        }); else {
+            var matchingOperandConfig = $filter("filter")(ctrl.options.availableOperands, {
+                "class": operand["class"]
+            })[0];
+            if (angular.isUndefined(matchingOperandConfig)) throw new UnknownOperandClassException(operand["class"]);
+            angular.extend(operand, matchingOperandConfig);
+        }
+    }
     var ctrl = this;
     if (ctrl.topLevelGroup = {
         operator: "AND",
@@ -14,16 +25,23 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
     }, ctrl.formula = function() {
         var formula;
         return ctrl.groupApi && (formula = ctrl.groupApi.formula()), formula;
+    }, ctrl.loadEquation = function(equation) {
+        ctrl.topLevelGroup.operator = equation.operator;
+        var operands = angular.copy(equation.operands);
+        angular.forEach(operands, function(operand) {
+            loadOperand(operand);
+        }), ctrl.topLevelGroup.operator = equation.operator, ctrl.topLevelGroup.operands = operands;
     }, angular.isFunction(ctrl.onReady)) {
         var equationApi = {
             value: ctrl.value,
-            formula: ctrl.formula
+            formula: ctrl.formula,
+            loadEquation: ctrl.loadEquation
         };
         ctrl.onReady({
             equationApi: equationApi
         });
     }
-}).directive("equation", [ "$templateCache", function($templateCache) {
+} ]).directive("equation", [ "$templateCache", function($templateCache) {
     return {
         restrict: "EA",
         scope: {},
@@ -39,7 +57,15 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         controllerAs: "equation",
         template: $templateCache.get("equation.html")
     };
-} ]), angular.module("ngEquation").controller("ExpressionGroupCtrl", function() {
+} ]), angular.module("ngEquation").factory("UnknownOperandClassException", function() {
+    function UnknownOperandClassException(className) {
+        this.message = 'Available operands does not include an operand with class "' + className + '".', 
+        this.stack = new Error().stack;
+    }
+    return UnknownOperandClassException.prototype = Object.create(Error.prototype), 
+    UnknownOperandClassException.prototype.constructor = UnknownOperandClassException, 
+    UnknownOperandClassException.prototype.name = "UnknownOperandClassException", UnknownOperandClassException;
+}), angular.module("ngEquation").controller("ExpressionGroupCtrl", function() {
     function getValue(operand) {
         var value;
         return value = ctrl.isSubgroup(operand) ? {
