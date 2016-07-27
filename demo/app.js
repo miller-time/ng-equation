@@ -27,5 +27,37 @@ angular.module('exampleApp', ['ngEquation'])
                 formula = ctrl.equationApi.formula();
             }
             return formula ? formula : 'N/A';
-        }
+        };
+
+        ctrl.loadCannedEquation = function() {
+            var cannedEquation = {
+                operator: 'AND',
+                operands: [
+                    {
+                        class: 'fruit',
+                        value: 'apple'
+                    },
+                    {
+                        class: 'fruit',
+                        value: 'banana'
+                    },
+                    {
+                        operator: 'AND NOT',
+                        operands: [
+                            {
+                                class: 'fruit',
+                                value: 'lime'
+                            },
+                            {
+                                class: 'fruit',
+                                value: 'orange'
+                            }
+                        ]
+                    }
+                ]
+            };
+            if (ctrl.equationApi) {
+                ctrl.equationApi.loadEquation(cannedEquation);
+            }
+        };
     });
