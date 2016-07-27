@@ -79,6 +79,24 @@ describe('expressionOperand directive', function() {
         });
     });
 
+    describe('with optional option of incorrect type', function() {
+        it('should raise an operand type exception', function() {
+            var operandOptions = {
+                class: 'foo',
+                typeLabel: 'Foo',
+                getLabel: jasmine.createSpy('fooOperand.getLabel'),
+                editMetadata: jasmine.createSpy('fooOperand.editMetadata'),
+                getTooltipText: 'foo tooltip text'
+            };
+            expect(function() {
+                instantiate(operandOptions);
+            }).toThrowError(
+                OperandOptionTypeException,
+                'Operand options property "getTooltipText" is incorrect type. Expected: "function". Got: "string".'
+            );
+        });
+    });
+
     describe('with valid options', function() {
         var controller,
             operandOptions;
@@ -92,6 +110,9 @@ describe('expressionOperand directive', function() {
                     return {
                         value: 'newValue'
                     };
+                }),
+                getTooltipText: jasmine.createSpy('fooOperand.getTooltipText').and.callFake(function() {
+                    return 'this is a foo operand';
                 })
             };
             controller = instantiate(operandOptions);
