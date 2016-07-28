@@ -1,31 +1,37 @@
 'use strict';
 
 angular.module('ngEquation')
-    .factory('operandOptions', function() {
+    .factory('operandOptions', function(MissingOperandOptionException, OperandOptionTypeException) {
         var operandOptionsApi = {
-            class: 'string',
-            typeLabel: 'string',
-            editMetadata: 'function',
-            getLabel: 'function'
+            class: {
+                type: 'string',
+                required: true
+            },
+            typeLabel: {
+                type: 'string',
+                required: true
+            },
+            editMetadata: {
+                type: 'function',
+                required: true
+            },
+            getLabel: {
+                type: 'function',
+                required: true
+            },
+            getTooltipText: {
+                type: 'function',
+                required: false
+            }
         };
-
-        function MissingOperandOptionException(property) {
-            this.error = 'Operand options missing required property "' + property + '".';
-        }
-
-        function OperandOptionTypeException(property, expectedType, propertyType) {
-            this.error = 'Operand options property "' + property + '" is incorrect type. ' +
-                'Expected: "' + expectedType + '". ' +
-                'Got: "' + propertyType + '".';
-        }
 
         return {
             validate: function(obj) {
-                angular.forEach(operandOptionsApi, function(propertyType, apiProperty) {
-                    if (!obj[apiProperty]) {
-                        throw new MissingOperandOptionException(apiProperty);
-                    } else if (typeof(obj[apiProperty]) !== propertyType) {
-                        throw new OperandOptionTypeException(apiProperty, propertyType, typeof(obj[apiProperty]));
+                angular.forEach(operandOptionsApi, function(propertyOptions, propertyName) {
+                    if (propertyOptions.required && !(propertyName in obj)) {
+                        throw new MissingOperandOptionException(propertyName);
+                    } else if (propertyName in obj && typeof(obj[propertyName]) !== propertyOptions.type) {
+                        throw new OperandOptionTypeException(propertyName, propertyOptions.type, typeof(obj[propertyName]));
                     }
                 });
             }
