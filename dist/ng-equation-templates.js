@@ -132,8 +132,10 @@ angular.module("expression-operand-toolbox.html", []).run(["$templateCache", fun
 angular.module("expression-operand.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("expression-operand.html",
     "<span style=\"display: inline-block\">\n" +
-    "    <span class=\"eq-operand\" style=\"display: inline-block\"\n" +
-    "        ng-class=\"operand.options.class\">\n" +
+    "    <span class=\"eq-operand\"\n" +
+    "          style=\"display: inline-block\"\n" +
+    "          ng-class=\"operand.options.class\"\n" +
+    "          uib-tooltip=\"{{ operand.options.getTooltipText(operand.options) }}\">\n" +
     "        <span ng-if=\"operand.options.value\">\n" +
     "            {{operand.options.getLabel(operand.options)}}\n" +
     "        </span>\n" +
