@@ -56,7 +56,7 @@ describe('expressionGroup directive', function() {
     it('should allow getting the "value"', function() {
         expect(controller.value()).toEqual({
             operator: 'AND',
-            children: []
+            operands: []
         });
     });
 
@@ -89,10 +89,10 @@ describe('expressionGroup directive', function() {
         it('should allow getting the "value" of operand', function() {
             expect(controller.value()).toEqual({
                 operator: 'AND',
-                children: [
+                operands: [
                     {
-                        itemType: 'foo',
-                        id: 'bar',
+                        class: 'foo',
+                        value: 'bar',
                         label: 'Bar'
                     }
                 ]
@@ -156,10 +156,10 @@ describe('expressionGroup directive', function() {
         it('should allow getting the "value" of the subgroup', function() {
             expect(controller.value()).toEqual({
                 operator: 'AND',
-                children: [
+                operands: [
                     {
                         operator: 'AND',
-                        children: []
+                        operands: []
                     }
                 ]
             });
@@ -181,13 +181,13 @@ describe('expressionGroup directive', function() {
             it('should allow getting the "value" of all its descendents', function() {
                 expect(controller.value()).toEqual({
                     operator: 'AND',
-                    children: [
+                    operands: [
                         {
                             operator: 'AND',
-                            children: [
+                            operands: [
                                 {
-                                    itemType: 'foo',
-                                    id: 'bar',
+                                    class: 'foo',
+                                    value: 'bar',
                                     label: 'Bar'
                                 }
                             ]

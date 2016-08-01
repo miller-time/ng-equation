@@ -86,12 +86,12 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         var value;
         return value = ctrl.isSubgroup(operand) ? {
             operator: operand.operator,
-            children: operand.operands.map(function(childOperand) {
+            operands: operand.operands.map(function(childOperand) {
                 return getValue(childOperand);
             })
         } : {
-            itemType: operand["class"],
-            id: operand.value,
+            "class": operand["class"],
+            value: operand.value,
             label: operand.getLabel(operand)
         };
     }
@@ -124,7 +124,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
     }, ctrl.value = function() {
         return {
             operator: ctrl.operator,
-            children: ctrl.operands.map(function(operand) {
+            operands: ctrl.operands.map(function(operand) {
                 return getValue(operand);
             })
         };

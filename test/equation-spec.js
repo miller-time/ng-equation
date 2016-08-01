@@ -44,7 +44,7 @@ describe('equation directive', function() {
         it('should allow getting "value" of the topLevelGroup', function() {
             expect(controller.value()).toEqual({
                 operator: 'AND',
-                children: []
+                operands: []
             });
         });
 

@@ -46,14 +46,14 @@ angular.module('ngEquation')
             if (ctrl.isSubgroup(operand)) {
                 value = {
                     operator: operand.operator,
-                    children: operand.operands.map(function(childOperand) {
+                    operands: operand.operands.map(function(childOperand) {
                         return getValue(childOperand);
                     })
                 };
             } else {
                 value = {
-                    itemType: operand.class,
-                    id: operand.value,
+                    class: operand.class,
+                    value: operand.value,
                     label: operand.getLabel(operand)
                 };
             }
@@ -63,7 +63,7 @@ angular.module('ngEquation')
         ctrl.value = function() {
             return {
                 operator: ctrl.operator,
-                children: ctrl.operands.map(function(operand) {
+                operands: ctrl.operands.map(function(operand) {
                     return getValue(operand);
                 })
             };
