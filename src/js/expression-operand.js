@@ -30,8 +30,8 @@ angular.module('ngEquation')
                 angular.forEach(operandOptionsApi, function(propertyOptions, propertyName) {
                     if (propertyOptions.required && !(propertyName in obj)) {
                         throw new MissingOperandOptionException(propertyName);
-                    } else if (propertyName in obj && typeof(obj[propertyName]) !== propertyOptions.type) {
-                        throw new OperandOptionTypeException(propertyName, propertyOptions.type, typeof(obj[propertyName]));
+                    } else if (propertyName in obj && typeof (obj[propertyName]) !== propertyOptions.type) {
+                        throw new OperandOptionTypeException(propertyName, propertyOptions.type, typeof (obj[propertyName]));
                     }
                 });
             }

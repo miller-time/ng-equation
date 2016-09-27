@@ -12,12 +12,15 @@
     "angular/controller-name": [2,"/[A-Z].*Ctrl/"],
     "comma-dangle": ["error", "never"],
     "func-names": "off",
-    "indent": ["error", 4, { "SwitchCase": 1, "VariableDeclarator": 1, "outerIIFEBody": 1 }],
+    "indent": ["error", 4, {"SwitchCase": 1, "VariableDeclarator": 1, "outerIIFEBody": 1}],
+    "linebreak-style": "off", // windows users checkout with CRLF so we can't enable this rule
     "max-len": "off",
     "no-mixed-operators": "off",
+    "no-plusplus": ["error", {"allowForLoopAfterthoughts": true}],
     "object-curly-spacing": "off",
     "one-var": "off",
     "space-before-function-paren": ["error", "never"],
+    "valid-typeof": ["error", {"requireStringLiterals": false}],
     "vars-on-top": "off"
   }
 }
