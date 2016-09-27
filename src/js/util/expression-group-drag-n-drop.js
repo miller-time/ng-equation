@@ -8,7 +8,7 @@ angular.module('ngEquation')
                     .dropzone({
                         accept: '.eq-operand',
                         overlap: 0.10,
-                        checker: function(dragEvent, event, dropped, dropZone, dropElement, draggable, draggableElement) {
+                        checker: function(_dragEvent, _event, dropped, _dropZone, dropElement, _draggable, draggableElement) {
                             var operandCtrl = angular.element(draggableElement).scope().operand;
 
                             var groupScope = angular.element(dropElement).scope();

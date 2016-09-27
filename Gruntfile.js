@@ -20,7 +20,7 @@ module.exports = function(grunt) {
                             'src/**/*.js'
                         ],
                         expand: true,
-                        rename: function(destPath, srcPath) {
+                        rename: function(_destPath, srcPath) {
                             var match = /^src\/(.*)/.exec(srcPath);
                             if (match && match[1]) {
                                 return 'dist/.tmp/' + match[1];

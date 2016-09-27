@@ -13,7 +13,6 @@ describe('expressionOperand directive', function() {
     beforeEach(inject(function(
         $compile,
         $rootScope,
-        $timeout,
         _$q_,
         _$log_,
         _MissingOperandOptionException_,

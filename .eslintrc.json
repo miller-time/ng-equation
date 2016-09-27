@@ -14,12 +14,17 @@
     "func-names": "off",
     "indent": ["error", 4, {"SwitchCase": 1, "VariableDeclarator": 1, "outerIIFEBody": 1}],
     "linebreak-style": "off", // windows users checkout with CRLF so we can't enable this rule
-    "max-len": "off",
+    "max-len": "off", //["error", 120],
+    "no-global-assign": "error",
     "no-mixed-operators": "off",
     "no-plusplus": ["error", {"allowForLoopAfterthoughts": true}],
-    "object-curly-spacing": "off",
+    "no-unsafe-negation": "error",
+    "no-unused-vars": ["error", {"vars": "local", "args": "all", "argsIgnorePattern": "_.*[^_]$"}],
+    "no-use-before-define": ["error", {"functions": false}],
+    "object-curly-spacing": ["error", "never"],
     "one-var": "off",
     "space-before-function-paren": ["error", "never"],
+    "strict": "error",
     "valid-typeof": ["error", {"requireStringLiterals": false}],
     "vars-on-top": "off"
   }
