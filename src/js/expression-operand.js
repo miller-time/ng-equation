@@ -31,7 +31,11 @@ angular.module('ngEquation')
                     if (propertyOptions.required && !(propertyName in obj)) {
                         throw new MissingOperandOptionException(propertyName);
                     } else if (propertyName in obj && typeof (obj[propertyName]) !== propertyOptions.type) {
-                        throw new OperandOptionTypeException(propertyName, propertyOptions.type, typeof (obj[propertyName]));
+                        throw new OperandOptionTypeException(
+                            propertyName,
+                            propertyOptions.type,
+                            typeof (obj[propertyName])
+                        );
                     }
                 });
             }
@@ -82,7 +86,10 @@ angular.module('ngEquation')
                 } else if (!isValueInitialized) {
                     ctrl.removeFromGroup();
                 } else {
-                    $log.warn('editMetadata resulted in undefined value, operand will retain previous value of ' + ctrl.options.value);
+                    $log.warn(
+                        'editMetadata resulted in undefined value, operand will retain previous value of '
+                        + ctrl.options.value
+                    );
                 }
             }, function() {
                 if (!isValueInitialized) {

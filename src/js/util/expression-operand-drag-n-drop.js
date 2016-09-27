@@ -54,7 +54,15 @@ angular.module('ngEquation')
                     })
                     .dropzone({
                         accept: '.eq-operand',
-                        checker: function(_dragEvent, _event, dropped, _dropZone, dropElement, _draggable, draggableElement) {
+                        checker: function(
+                            _dragEvent,
+                            _event,
+                            dropped,
+                            _dropZone,
+                            dropElement,
+                            _draggable,
+                            draggableElement
+                        ) {
                             var existingOperandScope = angular.element(dropElement).scope();
                             if (existingOperandScope) {
                                 var existingOperandCtrl = existingOperandScope.operand;

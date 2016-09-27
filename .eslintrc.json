@@ -14,7 +14,7 @@
     "func-names": "off",
     "indent": ["error", 4, {"SwitchCase": 1, "VariableDeclarator": 1, "outerIIFEBody": 1}],
     "linebreak-style": "off", // windows users checkout with CRLF so we can't enable this rule
-    "max-len": "off", //["error", 120],
+    "max-len": ["error", 120],
     "no-global-assign": "error",
     "no-mixed-operators": "off",
     "no-plusplus": ["error", {"allowForLoopAfterthoughts": true}],
