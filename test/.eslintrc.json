@@ -8,6 +8,8 @@
     "inject": false
   },
   "rules": {
-    "jasmine/no-spec-dupes":[1, "branch"] // allow same test name as long as different branch
+    "jasmine/no-spec-dupes": [1, "branch"], // allow same test name as long as different branch
+    "jasmine/no-suite-dupes": [1, "branch"], // allow same describe name as long as different branch
+    "max-len": ["error", {"code": 120, "ignorePattern": "^\\s*it\\('"}]
   }
 }

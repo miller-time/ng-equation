@@ -34,7 +34,9 @@ angular.module('ngEquation')
                     loadOperand(childOperand);
                 });
             } else {
-                var matchingOperandConfig = $filter('filter')(ctrl.options.availableOperands, {class: operand.class})[0];
+                var matchingOperandConfig = $filter('filter')(
+                    ctrl.options.availableOperands, {class: operand.class}
+                )[0];
                 if (angular.isUndefined(matchingOperandConfig)) {
                     throw new UnknownOperandClassException(operand.class);
                 }
