@@ -6,9 +6,9 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
             loadOperand(childOperand);
         }); else {
             var matchingOperandConfig = $filter("filter")(ctrl.options.availableOperands, {
-                "class": operand["class"]
+                class: operand.class
             })[0];
-            if (angular.isUndefined(matchingOperandConfig)) throw new UnknownOperandClassException(operand["class"]);
+            if (angular.isUndefined(matchingOperandConfig)) throw new UnknownOperandClassException(operand.class);
             angular.extend(operand, matchingOperandConfig);
         }
     }
@@ -50,7 +50,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         },
         bindToController: {
             options: "=equationOptions",
-            "class": "@equationClass",
+            class: "@equationClass",
             onReady: "&"
         },
         controller: "EquationCtrl",
@@ -90,7 +90,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
                 return getValue(childOperand);
             })
         } : {
-            "class": operand["class"],
+            class: operand.class,
             value: operand.value,
             label: operand.getLabel(operand)
         };
@@ -178,7 +178,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
     };
 } ]), angular.module("ngEquation").factory("operandOptions", [ "MissingOperandOptionException", "OperandOptionTypeException", function(MissingOperandOptionException, OperandOptionTypeException) {
     var operandOptionsApi = {
-        "class": {
+        class: {
             type: "string",
             required: !0
         },
@@ -203,7 +203,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         validate: function(obj) {
             angular.forEach(operandOptionsApi, function(propertyOptions, propertyName) {
                 if (propertyOptions.required && !(propertyName in obj)) throw new MissingOperandOptionException(propertyName);
-                if (propertyName in obj && typeof obj[propertyName] !== propertyOptions.type) throw new OperandOptionTypeException(propertyName, propertyOptions.type, (typeof obj[propertyName]));
+                if (propertyName in obj && typeof obj[propertyName] !== propertyOptions.type) throw new OperandOptionTypeException(propertyName, propertyOptions.type, typeof obj[propertyName]);
             });
         }
     };
@@ -251,7 +251,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
             $window.interact(element.find(".eq-new-operand")[0]).dropzone({
                 accept: ".eq-operand",
                 overlap: .1,
-                checker: function(dragEvent, event, dropped, dropZone, dropElement, draggable, draggableElement) {
+                checker: function(_dragEvent, _event, dropped, _dropZone, dropElement, _draggable, draggableElement) {
                     var operandCtrl = angular.element(draggableElement).scope().operand, groupScope = angular.element(dropElement).scope();
                     if (groupScope) {
                         var groupCtrl = angular.element(dropElement).scope().group;
@@ -347,7 +347,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
                 }
             }).dropzone({
                 accept: ".eq-operand",
-                checker: function(dragEvent, event, dropped, dropZone, dropElement, draggable, draggableElement) {
+                checker: function(_dragEvent, _event, dropped, _dropZone, dropElement, _draggable, draggableElement) {
                     var existingOperandScope = angular.element(dropElement).scope();
                     if (existingOperandScope) {
                         var existingOperandCtrl = existingOperandScope.operand;
