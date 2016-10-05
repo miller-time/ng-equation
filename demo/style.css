@@ -2,6 +2,10 @@
     flex-direction: column;
 }
 
+.ng-equation.flex .eq-formula-container {
+    text-align: center;
+}
+
 .eq-operand.fruit, .eq-operand-menu-item.fruit {
     background-color: lightblue;
     color: white;
