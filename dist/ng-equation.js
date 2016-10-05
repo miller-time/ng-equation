@@ -6,9 +6,9 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
             loadOperand(childOperand);
         }); else {
             var matchingOperandConfig = $filter("filter")(ctrl.options.availableOperands, {
-                "class": operand["class"]
+                class: operand.class
             })[0];
-            if (angular.isUndefined(matchingOperandConfig)) throw new UnknownOperandClassException(operand["class"]);
+            if (angular.isUndefined(matchingOperandConfig)) throw new UnknownOperandClassException(operand.class);
             angular.extend(operand, matchingOperandConfig);
         }
     }
@@ -50,14 +50,30 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         },
         bindToController: {
             options: "=equationOptions",
-            "class": "@equationClass",
+            class: "@equationClass",
             onReady: "&"
         },
         controller: "EquationCtrl",
         controllerAs: "equation",
         template: $templateCache.get("equation.html")
     };
-} ]), angular.module("ngEquation").factory("UnknownOperandClassException", function() {
+} ]), angular.module("ngEquation").factory("MissingOperandOptionException", function() {
+    function MissingOperandOptionException(property) {
+        this.message = 'Operand options missing required property "' + property + '".', 
+        this.stack = new Error().stack;
+    }
+    return MissingOperandOptionException.prototype = Object.create(Error.prototype), 
+    MissingOperandOptionException.prototype.constructor = MissingOperandOptionException, 
+    MissingOperandOptionException.prototype.name = "MissingOperandOptionException", 
+    MissingOperandOptionException;
+}), angular.module("ngEquation").factory("OperandOptionTypeException", function() {
+    function OperandOptionTypeException(property, expectedType, propertyType) {
+        this.message = 'Operand options property "' + property + '" is incorrect type. Expected: "' + expectedType + '". Got: "' + propertyType + '".', 
+        this.stack = new Error().stack;
+    }
+    return OperandOptionTypeException.prototype = Object.create(Error.prototype), OperandOptionTypeException.prototype.constructor = OperandOptionTypeException, 
+    OperandOptionTypeException.prototype.name = "OperandOptionTypeException", OperandOptionTypeException;
+}), angular.module("ngEquation").factory("UnknownOperandClassException", function() {
     function UnknownOperandClassException(className) {
         this.message = 'Available operands does not include an operand with class "' + className + '".', 
         this.stack = new Error().stack;
@@ -70,12 +86,12 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         var value;
         return value = ctrl.isSubgroup(operand) ? {
             operator: operand.operator,
-            children: operand.operands.map(function(childOperand) {
+            operands: operand.operands.map(function(childOperand) {
                 return getValue(childOperand);
             })
         } : {
-            itemType: operand["class"],
-            id: operand.value,
+            class: operand.class,
+            value: operand.value,
             label: operand.getLabel(operand)
         };
     }
@@ -108,7 +124,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
     }, ctrl.value = function() {
         return {
             operator: ctrl.operator,
-            children: ctrl.operands.map(function(operand) {
+            operands: ctrl.operands.map(function(operand) {
                 return getValue(operand);
             })
         };
@@ -160,28 +176,38 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         controllerAs: "toolbox",
         template: $templateCache.get("expression-operand-toolbox.html")
     };
-} ]), angular.module("ngEquation").factory("operandOptions", function() {
-    function MissingOperandOptionException(property) {
-        this.error = 'Operand options missing required property "' + property + '".';
-    }
-    function OperandOptionTypeException(property, expectedType, propertyType) {
-        this.error = 'Operand options property "' + property + '" is incorrect type. Expected: "' + expectedType + '". Got: "' + propertyType + '".';
-    }
+} ]), angular.module("ngEquation").factory("operandOptions", [ "MissingOperandOptionException", "OperandOptionTypeException", function(MissingOperandOptionException, OperandOptionTypeException) {
     var operandOptionsApi = {
-        "class": "string",
-        typeLabel: "string",
-        editMetadata: "function",
-        getLabel: "function"
+        class: {
+            type: "string",
+            required: !0
+        },
+        typeLabel: {
+            type: "string",
+            required: !0
+        },
+        editMetadata: {
+            type: "function",
+            required: !0
+        },
+        getLabel: {
+            type: "function",
+            required: !0
+        },
+        getTooltipText: {
+            type: "function",
+            required: !1
+        }
     };
     return {
         validate: function(obj) {
-            angular.forEach(operandOptionsApi, function(propertyType, apiProperty) {
-                if (!obj[apiProperty]) throw new MissingOperandOptionException(apiProperty);
-                if (typeof obj[apiProperty] !== propertyType) throw new OperandOptionTypeException(apiProperty, propertyType, (typeof obj[apiProperty]));
+            angular.forEach(operandOptionsApi, function(propertyOptions, propertyName) {
+                if (propertyOptions.required && !(propertyName in obj)) throw new MissingOperandOptionException(propertyName);
+                if (propertyName in obj && typeof obj[propertyName] !== propertyOptions.type) throw new OperandOptionTypeException(propertyName, propertyOptions.type, typeof obj[propertyName]);
             });
         }
     };
-}).controller("ExpressionOperandCtrl", [ "$q", "$log", "operandOptions", function($q, $log, operandOptions) {
+} ]).controller("ExpressionOperandCtrl", [ "$q", "$log", "operandOptions", function($q, $log, operandOptions) {
     function addAdditionalOperands(values) {
         ctrl.group ? angular.forEach(values, function(value) {
             var newOperand = angular.copy(ctrl.options);
@@ -225,7 +251,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
             $window.interact(element.find(".eq-new-operand")[0]).dropzone({
                 accept: ".eq-operand",
                 overlap: .1,
-                checker: function(dragEvent, event, dropped, dropZone, dropElement, draggable, draggableElement) {
+                checker: function(_dragEvent, _event, dropped, _dropZone, dropElement, _draggable, draggableElement) {
                     var operandCtrl = angular.element(draggableElement).scope().operand, groupScope = angular.element(dropElement).scope();
                     if (groupScope) {
                         var groupCtrl = angular.element(dropElement).scope().group;
@@ -321,7 +347,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
                 }
             }).dropzone({
                 accept: ".eq-operand",
-                checker: function(dragEvent, event, dropped, dropZone, dropElement, draggable, draggableElement) {
+                checker: function(_dragEvent, _event, dropped, _dropZone, dropElement, _draggable, draggableElement) {
                     var existingOperandScope = angular.element(dropElement).scope();
                     if (existingOperandScope) {
                         var existingOperandCtrl = existingOperandScope.operand;
