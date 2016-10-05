@@ -2,7 +2,8 @@
     <span class="eq-operand"
           style="display: inline-block"
           ng-class="operand.options.class"
-          uib-tooltip="{{ operand.options.getTooltipText(operand.options) }}">
+          uib-tooltip="{{ operand.options.getTooltipText(operand.options) }}"
+          tooltip-append-to-body="true">
         <span ng-if="operand.options.value">
             {{operand.options.getLabel(operand.options)}}
         </span>
