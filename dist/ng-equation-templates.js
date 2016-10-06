@@ -17,6 +17,10 @@ angular.module("equation.html", []).run(["$templateCache", function($templateCac
     "        </expression-operand-toolbox>\n" +
     "    </span>\n" +
     "\n" +
+    "    <span class=\"eq-formula-container\">\n" +
+    "        <span>{{ equation.formula() }}</span>\n" +
+    "    </span>\n" +
+    "\n" +
     "    <span class=\"top-level-group\">\n" +
     "        <expression-group\n" +
     "            operator=\"equation.topLevelGroup.operator\"\n" +
