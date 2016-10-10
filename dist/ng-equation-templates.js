@@ -18,6 +18,12 @@ angular.module("equation.html", []).run(["$templateCache", function($templateCac
     "    </span>\n" +
     "\n" +
     "    <span class=\"eq-formula-container\">\n" +
+    "        <span ng-transclude=\"formulaLabel\"\n" +
+    "            class=\"eq-formula-label-container\">\n" +
+    "            <label class=\"eq-formula-label\">\n" +
+    "                Formula:\n" +
+    "            </label>\n" +
+    "        </span>\n" +
     "        <span>{{ equation.formula() }}</span>\n" +
     "    </span>\n" +
     "\n" +
