@@ -68,7 +68,8 @@ angular.module('ngEquation')
             restrict: 'EA',
             scope: {},
             transclude: {
-                toolboxLabel: '?toolboxLabel'
+                toolboxLabel: '?toolboxLabel',
+                formulaLabel: '?formulaLabel'
             },
             bindToController: {
                 options: '=equationOptions',
