@@ -14,6 +14,12 @@
     </span>
 
     <span class="eq-formula-container">
+        <span ng-transclude="formulaLabel"
+            class="eq-formula-label-container">
+            <label class="eq-formula-label">
+                Formula:
+            </label>
+        </span>
         <span>{{ equation.formula() }}</span>
     </span>
 

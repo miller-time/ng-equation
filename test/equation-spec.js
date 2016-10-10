@@ -14,11 +14,11 @@ describe('equation directive', function() {
         $scope = $rootScope.$new();
         $scope.myOptions = {opt: 1};
 
-        instantiate = function(toolboxLabel) {
+        instantiate = function(transclude) {
             element = angular.element(
                 '<equation ' +
                     'equation-options="myOptions">' +
-                    (toolboxLabel || '') +
+                    (transclude || '') +
                 '</equation>'
             );
             $compile(element)($scope);
@@ -66,6 +66,24 @@ describe('equation directive', function() {
 
         it('should contain the custom label element that was transcluded', function() {
             expect(element.find('.eq-toolbox-label').length).toBe(0);
+
+            var labelElem = element.find('.custom-label');
+            expect(labelElem.length).toBe(1);
+            expect(labelElem.text().trim()).toEqual('Custom');
+        });
+    });
+
+    describe('with formula label transcluded', function() {
+        beforeEach(function() {
+            instantiate(
+                '<formula-label>' +
+                    '<span class="custom-label">Custom</span>' +
+                '</formula-label>'
+            );
+        });
+
+        it('should contain the custom label element that was transcluded', function() {
+            expect(element.find('.eq-formula-label').length).toBe(0);
 
             var labelElem = element.find('.custom-label');
             expect(labelElem.length).toBe(1);
