@@ -7,7 +7,8 @@ angular.module('ngEquation')
             restrict: 'EA',
             scope: {},
             bindToController: {
-                operands: '='
+                operands: '=',
+                defaultGroupApi: '<?'
             },
             controller: 'ExpressionOperandToolboxCtrl',
             controllerAs: 'toolbox',
