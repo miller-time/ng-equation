@@ -169,6 +169,12 @@ angular.module('ngEquation')
                             event.target.classList.remove('drop-active');
                             event.target.classList.remove('drop-target');
                         }
+                    })
+                    .actionChecker(function(pointer, event, action) {
+                        if (event.button !== 0) {
+                            return null;
+                        }
+                        return action;
                     });
             }
         };
