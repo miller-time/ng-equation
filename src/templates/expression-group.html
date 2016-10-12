@@ -14,7 +14,8 @@
                 subgroup-id="{{$index}}"
                 operator="operand.operator"
                 operands="operand.operands"
-                available-operands="group.availableOperands">
+                available-operands="group.availableOperands"
+                equation-options="group.equationOptions">
             </expression-group>
         </span>
 
@@ -22,7 +23,8 @@
         <span ng-if="!operand.operands">
             <expression-operand
                 group="group"
-                operand-options="operand">
+                operand-options="operand"
+                equation-options="group.equationOptions">
             </expression-operand>
         </span>
     </span>
@@ -52,7 +54,8 @@
 
     <div class="btn-group" uib-dropdown>
         <button class="eq-new-operand btn" uib-dropdown-toggle>
-            &#10133; <span class="caret"></span>
+            <i ng-class="group.equationOptions.iconAddClass"></i>
+            <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" uib-dropdown-menu>
             <li ng-repeat="availableOperand in group.availableOperands"

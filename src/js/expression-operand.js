@@ -116,7 +116,8 @@ angular.module('ngEquation')
             bindToController: {
                 group: '=?',
                 options: '=operandOptions',
-                defaultGroupApi: '<?'
+                defaultGroupApi: '<?',
+                equationOptions: '<'
             },
             controller: 'ExpressionOperandCtrl',
             controllerAs: 'operand',

@@ -4,6 +4,8 @@ angular.module('ngEquation')
     .controller('EquationCtrl', function($filter, UnknownOperandClassException) {
         var ctrl = this;
 
+        setDefaultOptions();
+
         ctrl.topLevelGroup = {
             operator: 'AND',
             operands: [],
@@ -62,6 +64,13 @@ angular.module('ngEquation')
             };
             ctrl.onReady({equationApi: equationApi});
         }
+
+        function setDefaultOptions() {
+            ctrl.options.iconAddClass = ctrl.options.iconAddClass || 'glyphicon glyphicon-plus';
+            ctrl.options.iconDragClass = ctrl.options.iconDragClass || 'glyphicon glyphicon-th';
+            ctrl.options.iconEditClass = ctrl.options.iconEditClass || 'glyphicon glyphicon-pencil';
+            ctrl.options.iconRemoveClass = ctrl.options.iconRemoveClass || 'glyphicon glyphicon-remove';
+        }
     })
     .directive('equation', function($templateCache) {
         return {
@@ -72,7 +81,7 @@ angular.module('ngEquation')
                 formulaLabel: '?formulaLabel'
             },
             bindToController: {
-                options: '=equationOptions',
+                options: '<equationOptions',
                 class: '@equationClass',
                 onReady: '&'
             },

@@ -108,7 +108,8 @@ angular.module('ngEquation')
                 operator: '=',
                 operands: '=',
                 availableOperands: '=',
-                onReady: '&'
+                onReady: '&',
+                equationOptions: '<'
             },
             controller: 'ExpressionGroupCtrl',
             controllerAs: 'group',
