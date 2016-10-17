@@ -92,7 +92,8 @@ angular.module('ngEquation')
         if (angular.isFunction(ctrl.onReady)) {
             var groupApi = {
                 value: ctrl.value,
-                formula: ctrl.formula
+                formula: ctrl.formula,
+                addOperand: ctrl.addOperand
             };
             ctrl.onReady({groupApi: groupApi});
         }
@@ -107,7 +108,8 @@ angular.module('ngEquation')
                 operator: '=',
                 operands: '=',
                 availableOperands: '=',
-                onReady: '&'
+                onReady: '&',
+                equationOptions: '<'
             },
             controller: 'ExpressionGroupCtrl',
             controllerAs: 'group',

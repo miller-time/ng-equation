@@ -1,11 +1,9 @@
 <span class="eq-toolbox">
-
     <span ng-repeat="operand in toolbox.operands">
-
         <expression-operand
-            operand-options="operand">
+            operand-options="operand"
+            default-group-api="toolbox.defaultGroupApi"
+            equation-options="toolbox.equationOptions">
         </expression-operand>
-
     </span>
-
 </span>

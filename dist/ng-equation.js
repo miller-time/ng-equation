@@ -12,8 +12,14 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
             angular.extend(operand, matchingOperandConfig);
         }
     }
+    function setDefaultOptions() {
+        ctrl.options.iconAddClass = ctrl.options.iconAddClass || "glyphicon glyphicon-plus", 
+        ctrl.options.iconDragClass = ctrl.options.iconDragClass || "glyphicon glyphicon-th", 
+        ctrl.options.iconEditClass = ctrl.options.iconEditClass || "glyphicon glyphicon-pencil", 
+        ctrl.options.iconRemoveClass = ctrl.options.iconRemoveClass || "glyphicon glyphicon-remove";
+    }
     var ctrl = this;
-    if (ctrl.topLevelGroup = {
+    if (setDefaultOptions(), ctrl.topLevelGroup = {
         operator: "AND",
         operands: [],
         onReady: function(groupApi) {
@@ -50,7 +56,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
             formulaLabel: "?formulaLabel"
         },
         bindToController: {
-            options: "=equationOptions",
+            options: "<equationOptions",
             class: "@equationClass",
             onReady: "&"
         },
@@ -134,7 +140,8 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
     }, angular.isFunction(ctrl.onReady)) {
         var groupApi = {
             value: ctrl.value,
-            formula: ctrl.formula
+            formula: ctrl.formula,
+            addOperand: ctrl.addOperand
         };
         ctrl.onReady({
             groupApi: groupApi
@@ -150,7 +157,8 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
             operator: "=",
             operands: "=",
             availableOperands: "=",
-            onReady: "&"
+            onReady: "&",
+            equationOptions: "<"
         },
         controller: "ExpressionGroupCtrl",
         controllerAs: "group",
@@ -171,7 +179,9 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         restrict: "EA",
         scope: {},
         bindToController: {
-            operands: "="
+            operands: "=",
+            defaultGroupApi: "<?",
+            equationOptions: "<"
         },
         controller: "ExpressionOperandToolboxCtrl",
         controllerAs: "toolbox",
@@ -230,6 +240,8 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         }, function() {
             isValueInitialized || ctrl.removeFromGroup();
         });
+    }, ctrl.addToDefaultGroup = function() {
+        ctrl.defaultGroupApi && ctrl.defaultGroupApi.addOperand(ctrl.options);
     }, ctrl.group && angular.isUndefined(ctrl.options.value) && ctrl.editMetadata(ctrl.options);
 } ]).directive("expressionOperand", [ "$templateCache", "expressionOperandDragNDrop", function($templateCache, expressionOperandDragNDrop) {
     return {
@@ -237,7 +249,9 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
         scope: {},
         bindToController: {
             group: "=?",
-            options: "=operandOptions"
+            options: "=operandOptions",
+            defaultGroupApi: "<?",
+            equationOptions: "<"
         },
         controller: "ExpressionOperandCtrl",
         controllerAs: "operand",
@@ -413,6 +427,8 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
                 ondropdeactivate: function(event) {
                     event.target.classList.remove("drop-active"), event.target.classList.remove("drop-target");
                 }
+            }).allowFrom(".eq-operand-drag-btn").actionChecker(function(pointer, event, action) {
+                return 0 !== event.button ? null : action;
             });
         }
     };

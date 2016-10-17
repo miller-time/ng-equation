@@ -98,6 +98,13 @@ angular.module('ngEquation')
             });
         };
 
+        ctrl.addToDefaultGroup = function() {
+            if (!ctrl.defaultGroupApi) {
+                return;
+            }
+            ctrl.defaultGroupApi.addOperand(ctrl.options);
+        };
+
         if (ctrl.group && angular.isUndefined(ctrl.options.value)) {
             ctrl.editMetadata(ctrl.options);
         }
@@ -108,7 +115,9 @@ angular.module('ngEquation')
             scope: {},
             bindToController: {
                 group: '=?',
-                options: '=operandOptions'
+                options: '=operandOptions',
+                defaultGroupApi: '<?',
+                equationOptions: '<'
             },
             controller: 'ExpressionOperandCtrl',
             controllerAs: 'operand',

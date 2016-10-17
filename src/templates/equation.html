@@ -9,7 +9,9 @@
         </span>
         <expression-operand-toolbox
             class="eq-toolbox-group-container"
-            operands="equation.options.availableOperands">
+            operands="equation.options.availableOperands"
+            default-group-api="equation.groupApi"
+            equation-options="equation.options">
         </expression-operand-toolbox>
     </span>
 
@@ -28,7 +30,8 @@
             operator="equation.topLevelGroup.operator"
             operands="equation.topLevelGroup.operands"
             on-ready="equation.topLevelGroup.onReady(groupApi)"
-            available-operands="equation.options.availableOperands">
+            available-operands="equation.options.availableOperands"
+            equation-options="equation.options">
         </expression-group>
     </span>
 

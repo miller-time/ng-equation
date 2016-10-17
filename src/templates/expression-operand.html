@@ -1,26 +1,38 @@
 <span style="display: inline-block">
-    <span class="eq-operand"
+    <span class="eq-operand btn-group"
           style="display: inline-block"
           ng-class="operand.options.class"
           uib-tooltip="{{ operand.options.getTooltipText(operand.options) }}"
           tooltip-append-to-body="true">
-        <span ng-if="operand.options.value">
-            {{operand.options.getLabel(operand.options)}}
+
+        <span class="btn eq-operand-drag-btn">
+            <i ng-class="operand.equationOptions.iconDragClass"></i>
+            <span class="eq-operand-label">
+                <span ng-if="operand.options.value">
+                    {{operand.options.getLabel(operand.options)}}
+                </span>
+                <span ng-if="!operand.options.value">
+                    {{operand.options.typeLabel}}
+                </span>
+            </span>
         </span>
-        <span ng-if="!operand.options.value">
-            {{operand.options.typeLabel}}
+
+        <span class="btn eq-operand-click-to-add"
+              ng-if="operand.defaultGroupApi"
+              ng-click="operand.addToDefaultGroup()">
+            <i ng-class="operand.equationOptions.iconAddClass"></i>
         </span>
 
         <button class="eq-edit-operand"
             ng-if="operand.options.value"
             ng-click="operand.editMetadata()">
-            &#x270E;
+            <i ng-class="operand.equationOptions.iconEditClass"></i>
         </button>
 
         <button class="eq-remove-operand"
             ng-if="operand.group"
             ng-click="operand.removeFromGroup()">
-            &times;
+            <i ng-class="operand.equationOptions.iconRemoveClass"></i>
         </button>
     </span>
 </span>
