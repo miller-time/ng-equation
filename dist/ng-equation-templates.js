@@ -13,7 +13,9 @@ angular.module("equation.html", []).run(["$templateCache", function($templateCac
     "        </span>\n" +
     "        <expression-operand-toolbox\n" +
     "            class=\"eq-toolbox-group-container\"\n" +
-    "            operands=\"equation.options.availableOperands\">\n" +
+    "            operands=\"equation.options.availableOperands\"\n" +
+    "            default-group-api=\"equation.groupApi\"\n" +
+    "            equation-options=\"equation.options\">\n" +
     "        </expression-operand-toolbox>\n" +
     "    </span>\n" +
     "\n" +
@@ -32,7 +34,8 @@ angular.module("equation.html", []).run(["$templateCache", function($templateCac
     "            operator=\"equation.topLevelGroup.operator\"\n" +
     "            operands=\"equation.topLevelGroup.operands\"\n" +
     "            on-ready=\"equation.topLevelGroup.onReady(groupApi)\"\n" +
-    "            available-operands=\"equation.options.availableOperands\">\n" +
+    "            available-operands=\"equation.options.availableOperands\"\n" +
+    "            equation-options=\"equation.options\">\n" +
     "        </expression-group>\n" +
     "    </span>\n" +
     "\n" +
@@ -58,7 +61,8 @@ angular.module("expression-group.html", []).run(["$templateCache", function($tem
     "                subgroup-id=\"{{$index}}\"\n" +
     "                operator=\"operand.operator\"\n" +
     "                operands=\"operand.operands\"\n" +
-    "                available-operands=\"group.availableOperands\">\n" +
+    "                available-operands=\"group.availableOperands\"\n" +
+    "                equation-options=\"group.equationOptions\">\n" +
     "            </expression-group>\n" +
     "        </span>\n" +
     "\n" +
@@ -66,7 +70,8 @@ angular.module("expression-group.html", []).run(["$templateCache", function($tem
     "        <span ng-if=\"!operand.operands\">\n" +
     "            <expression-operand\n" +
     "                group=\"group\"\n" +
-    "                operand-options=\"operand\">\n" +
+    "                operand-options=\"operand\"\n" +
+    "                equation-options=\"group.equationOptions\">\n" +
     "            </expression-operand>\n" +
     "        </span>\n" +
     "    </span>\n" +
@@ -96,7 +101,8 @@ angular.module("expression-group.html", []).run(["$templateCache", function($tem
     "\n" +
     "    <div class=\"btn-group\" uib-dropdown>\n" +
     "        <button class=\"eq-new-operand btn\" uib-dropdown-toggle>\n" +
-    "            &#10133; <span class=\"caret\"></span>\n" +
+    "            <i ng-class=\"group.equationOptions.iconAddClass\"></i>\n" +
+    "            <span class=\"caret\"></span>\n" +
     "        </button>\n" +
     "        <ul class=\"dropdown-menu\" uib-dropdown-menu>\n" +
     "            <li ng-repeat=\"availableOperand in group.availableOperands\"\n" +
@@ -126,15 +132,13 @@ angular.module("expression-group.html", []).run(["$templateCache", function($tem
 angular.module("expression-operand-toolbox.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("expression-operand-toolbox.html",
     "<span class=\"eq-toolbox\">\n" +
-    "\n" +
     "    <span ng-repeat=\"operand in toolbox.operands\">\n" +
-    "\n" +
     "        <expression-operand\n" +
-    "            operand-options=\"operand\">\n" +
+    "            operand-options=\"operand\"\n" +
+    "            default-group-api=\"toolbox.defaultGroupApi\"\n" +
+    "            equation-options=\"toolbox.equationOptions\">\n" +
     "        </expression-operand>\n" +
-    "\n" +
     "    </span>\n" +
-    "\n" +
     "</span>\n" +
     "");
 }]);
@@ -142,28 +146,40 @@ angular.module("expression-operand-toolbox.html", []).run(["$templateCache", fun
 angular.module("expression-operand.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("expression-operand.html",
     "<span style=\"display: inline-block\">\n" +
-    "    <span class=\"eq-operand\"\n" +
+    "    <span class=\"eq-operand btn-group\"\n" +
     "          style=\"display: inline-block\"\n" +
     "          ng-class=\"operand.options.class\"\n" +
     "          uib-tooltip=\"{{ operand.options.getTooltipText(operand.options) }}\"\n" +
     "          tooltip-append-to-body=\"true\">\n" +
-    "        <span ng-if=\"operand.options.value\">\n" +
-    "            {{operand.options.getLabel(operand.options)}}\n" +
+    "\n" +
+    "        <span class=\"btn eq-operand-drag-btn\">\n" +
+    "            <i ng-class=\"operand.equationOptions.iconDragClass\"></i>\n" +
+    "            <span class=\"eq-operand-label\">\n" +
+    "                <span ng-if=\"operand.options.value\">\n" +
+    "                    {{operand.options.getLabel(operand.options)}}\n" +
+    "                </span>\n" +
+    "                <span ng-if=\"!operand.options.value\">\n" +
+    "                    {{operand.options.typeLabel}}\n" +
+    "                </span>\n" +
+    "            </span>\n" +
     "        </span>\n" +
-    "        <span ng-if=\"!operand.options.value\">\n" +
-    "            {{operand.options.typeLabel}}\n" +
+    "\n" +
+    "        <span class=\"btn eq-operand-click-to-add\"\n" +
+    "              ng-if=\"operand.defaultGroupApi\"\n" +
+    "              ng-click=\"operand.addToDefaultGroup()\">\n" +
+    "            <i ng-class=\"operand.equationOptions.iconAddClass\"></i>\n" +
     "        </span>\n" +
     "\n" +
     "        <button class=\"eq-edit-operand\"\n" +
     "            ng-if=\"operand.options.value\"\n" +
     "            ng-click=\"operand.editMetadata()\">\n" +
-    "            &#x270E;\n" +
+    "            <i ng-class=\"operand.equationOptions.iconEditClass\"></i>\n" +
     "        </button>\n" +
     "\n" +
     "        <button class=\"eq-remove-operand\"\n" +
     "            ng-if=\"operand.group\"\n" +
     "            ng-click=\"operand.removeFromGroup()\">\n" +
-    "            &times;\n" +
+    "            <i ng-class=\"operand.equationOptions.iconRemoveClass\"></i>\n" +
     "        </button>\n" +
     "    </span>\n" +
     "</span>\n" +
