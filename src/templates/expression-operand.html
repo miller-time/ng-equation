@@ -7,11 +7,13 @@
 
         <span class="btn eq-operand-drag-btn">
             <i ng-class="operand.equationOptions.iconDragClass"></i>
-            <span ng-if="operand.options.value">
-                {{operand.options.getLabel(operand.options)}}
-            </span>
-            <span ng-if="!operand.options.value">
-                {{operand.options.typeLabel}}
+            <span class="eq-operand-label">
+                <span ng-if="operand.options.value">
+                    {{operand.options.getLabel(operand.options)}}
+                </span>
+                <span ng-if="!operand.options.value">
+                    {{operand.options.typeLabel}}
+                </span>
             </span>
         </span>
 
