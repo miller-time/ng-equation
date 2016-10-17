@@ -9,7 +9,18 @@
         position: relative;
         border: 1px solid darkgray;
         border-radius: 5px;
-        cursor: pointer;
+
+        .eq-operand-drag-btn {
+            cursor: move;
+            cursor: -webkit-grab;
+            cursor: -moz-grab;
+            cursor: grab;
+            &:active {
+                cursor: -webkit-grabbing;
+                cursor: -moz-grabbing;
+                cursor: grabbing;
+            }
+        }
 
         .eq-operand-click-to-add  {
             border-top-left-radius: 0;
