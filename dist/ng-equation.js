@@ -427,7 +427,7 @@ angular.module("ngEquation", [ "ui.bootstrap", "ngEquation.templates" ]), angula
                 ondropdeactivate: function(event) {
                     event.target.classList.remove("drop-active"), event.target.classList.remove("drop-target");
                 }
-            }).allowFrom(".eq-operand-drag-btn").actionChecker(function(pointer, event, action) {
+            }).allowFrom(".eq-operand-drag-btn").actionChecker(function(_pointer, event, action) {
                 return 0 !== event.button ? null : action;
             });
         }
