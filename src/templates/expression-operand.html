@@ -3,6 +3,7 @@
           style="display: inline-block"
           ng-class="operand.options.class"
           uib-tooltip="{{ operand.options.getTooltipText(operand.options) }}"
+          tooltip-placement="{{operand.options.tooltipPlacement || 'bottom'}}"
           tooltip-append-to-body="true">
 
         <span class="btn eq-operand-drag-btn">

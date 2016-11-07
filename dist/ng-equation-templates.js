@@ -150,6 +150,7 @@ angular.module("expression-operand.html", []).run(["$templateCache", function($t
     "          style=\"display: inline-block\"\n" +
     "          ng-class=\"operand.options.class\"\n" +
     "          uib-tooltip=\"{{ operand.options.getTooltipText(operand.options) }}\"\n" +
+    "          tooltip-placement=\"{{operand.options.tooltipPlacement || 'bottom'}}\"\n" +
     "          tooltip-append-to-body=\"true\">\n" +
     "\n" +
     "        <span class=\"btn eq-operand-drag-btn\">\n" +
