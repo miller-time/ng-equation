@@ -171,7 +171,7 @@ angular.module('ngEquation')
                         }
                     })
                     .allowFrom('.eq-operand-drag-btn')
-                    .actionChecker(function(pointer, event, action) {
+                    .actionChecker(function(_pointer, event, action) {
                         if (event.button !== 0) {
                             return null;
                         }
