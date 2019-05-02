@@ -1,6 +1,8 @@
 ng-equation
 ===========
 
+[![Build Status](https://travis-ci.org/miller-time/ng-equation.svg?branch=master)](https://travis-ci.org/miller-time/ng-equation)
+
 Boolean Equation Builder for complex data
 
 [Demo](https://miller-time.github.io/ng-equation/)

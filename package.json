@@ -34,5 +34,8 @@
   },
   "author": "Russell Cousineau <russell.miller@rentrakmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/miller-time/ng-equation"
+  "homepage": "https://github.com/miller-time/ng-equation",
+  "scripts": {
+    "test": "grunt test"
+  }
 }
